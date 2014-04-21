@@ -1,0 +1,19 @@
+{
+    "name": "jakubzapletal/bank-statements",
+    "description": "PHP library to parse bank account statements",
+    "version": "1.0.0",
+    "autoload": {
+        "psr-0": { "JakubZapletal\\Component\\BankStatement\\": ""}
+    },
+    "target-dir": "JakubZapletal/Component/BankStatement",
+    "require": {
+        "php": ">=5.4.0",
+        "phpunit/phpunit": "4.2.*@dev"
+    },
+    "scripts": {
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "minimum-stability": "dev"
+}
