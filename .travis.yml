@@ -7,9 +7,5 @@ php:
 before_script:
   - composer install
 
-script:
- - mkdir -p build/logs
- - phpunit --coverage-clover build/logs/clover.xml
-
 after_script:
  - php bin/coveralls -v
