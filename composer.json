@@ -7,10 +7,10 @@
     },
     "target-dir": "JakubZapletal/Component/BankStatement",
     "require": {
-        "php": ">=5.4.0",
-        "phpunit/phpunit": "4.0.*@dev"
+        "php": ">=5.4.0"
     },
     "require-dev": {
+        "phpunit/phpunit": "4.0.*@dev",
         "satooshi/php-coveralls": "dev-master"
     },
     "scripts": {
