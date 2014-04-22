@@ -9,4 +9,5 @@ PHP library to parse bank account statements
 
 * [ABO](doc/abo.md)
  * Česká spořitelna (CZ) `JakubZapletal\Component\BankStatement\Parser\ABOParser`
+ * Fio banka (CZ) `JakubZapletal\Component\BankStatement\Parser\ABO\FioBankaCZParser`
  * Raiffeisenbank (CZ) `JakubZapletal\Component\BankStatement\Parser\ABO\RaiffeisenbankCZParser`
