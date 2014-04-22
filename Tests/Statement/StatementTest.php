@@ -1,0 +1,146 @@
+<?php
+
+namespace JakubZapletal\Component\BankStatement\Tests\Statement;
+
+use JakubZapletal\Component\BankStatement\Statement\Statement;
+
+class StatementTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var Statement
+     */
+    protected $statement;
+
+    protected function setUp()
+    {
+        $this->statement = new Statement();
+    }
+
+    public function testBalance()
+    {
+        $balance = 123.45;
+
+        $this->statement->setBalance($balance);
+        $this->assertEquals($balance, $this->statement->getBalance());
+    }
+
+    public function testCreditTurnover()
+    {
+        $creditTurnover = 123.45;
+
+        $this->statement->setCreditTurnover($creditTurnover);
+        $this->assertEquals($creditTurnover, $this->statement->getCreditTurnover());
+    }
+
+    public function testCurrencyCode()
+    {
+        $currencyCode = 'CZK';
+
+        $this->statement->setCurrencyCode($currencyCode);
+        $this->assertEquals($currencyCode, $this->statement->getCurrencyCode());
+    }
+
+    public function testDateCreated()
+    {
+        $date = new \DateTime('2014-05-28');
+
+        $this->statement->setDateCreated($date);
+        $this->assertEquals($date, $this->statement->getDateCreated());
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testDateCreatedException()
+    {
+        $this->statement->setDateCreated('2014-05-28');
+    }
+
+    public function testSerialNumber()
+    {
+        $serialNumber = 12;
+
+        $this->statement->setSerialNumber($serialNumber);
+        $this->assertEquals($serialNumber, $this->statement->getSerialNumber());
+    }
+
+    public function testDebitTurnover()
+    {
+        $debitTurnover = 123.45;
+
+        $this->statement->setDebitTurnover($debitTurnover);
+        $this->assertEquals($debitTurnover, $this->statement->getDebitTurnover());
+    }
+
+    public function testAccountNumber()
+    {
+        $accountNumber = '123456789';
+
+        $this->statement->setAccountNumber($accountNumber);
+        $this->assertEquals($accountNumber, $this->statement->getAccountNumber());
+    }
+
+    public function testTransactions()
+    {
+        $transactionMock_1 = $this->getMock('JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction');
+        $transactionMock_1
+            ->expects($this->any())
+            ->method('getReceiptId')
+            ->will($this->returnValue(11))
+        ;
+
+        $transactionMock_2 = $this->getMock('JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction');
+        $transactionMock_2
+            ->expects($this->any())
+            ->method('getReceiptId')
+            ->will($this->returnValue(22))
+        ;
+
+        $this->statement
+            ->addTransaction($transactionMock_1)
+            ->addTransaction($transactionMock_2)
+        ;
+
+        $this->assertCount(2, $this->statement->getTransactions());
+
+        $this->assertEquals(2, $this->statement->count());
+
+        $this->assertEquals(22, $this->statement->current()->getReceiptId());
+        $this->assertSame(1, $this->statement->key());
+
+        $this->assertFalse($this->statement->next());
+        $this->assertFalse($this->statement->valid());
+
+        $this->statement->rewind();
+        $this->assertEquals(11, $this->statement->current()->getReceiptId());
+
+        $this->assertEquals(22, $this->statement->next()->getReceiptId());
+
+        $this->statement->removeTransaction($transactionMock_2);
+        $this->assertCount(1, $this->statement->getTransactions());
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testAddTransactionException()
+    {
+        $stdClassMock = $this->getMock('\stdClass');
+
+        $this->statement->addTransaction($stdClassMock);
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testRemoveTransactionException()
+    {
+        $transactionMock = $this->getMock('JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction');
+
+        $this->statement->addTransaction($transactionMock);
+
+        $stdClassMock = $this->getMock('\stdClass');
+        $this->statement->removeTransaction($stdClassMock);
+    }
+}
+ 

@@ -17,7 +17,16 @@ class Parser implements ParserInterface
      *
      * @return Statement
      */
-    public function parse($filePath){}
+    public function parse($filePath)
+    {
+        if (file_exists($filePath) === false) {
+            throw new \Exception('File "' . $filePath . '" doesn\'t exists');
+        }
+
+        $this->statement = $this->getStatementClass();
+
+        return $this->statement;
+    }
 
     /**
      * @return Statement

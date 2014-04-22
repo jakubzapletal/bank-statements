@@ -8,7 +8,7 @@
     "target-dir": "JakubZapletal/Component/BankStatement",
     "require": {
         "php": ">=5.4.0",
-        "phpunit/phpunit": "4.2.*@dev"
+        "phpunit/phpunit": "4.0.*@dev"
     },
     "scripts": {
     },
