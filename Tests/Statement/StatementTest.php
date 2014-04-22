@@ -91,22 +91,21 @@ class StatementTest extends \PHPUnit_Framework_TestCase
         $this->statement
             ->addTransaction($transactionMock_1)
             ->addTransaction($transactionMock_2)
+            ->addTransaction($transactionMock_2)
         ;
 
         $this->assertCount(2, $this->statement->getTransactions());
 
         $this->assertEquals(2, $this->statement->count());
 
-        $this->assertEquals(22, $this->statement->current()->getReceiptId());
-        $this->assertSame(1, $this->statement->key());
+        $this->statement->rewind();
+        $this->assertEquals(11, $this->statement->current()->getReceiptId());
+        $this->assertSame(0, $this->statement->key());
+
+        $this->assertEquals(22, $this->statement->next()->getReceiptId());
 
         $this->assertFalse($this->statement->next());
         $this->assertFalse($this->statement->valid());
-
-        $this->statement->rewind();
-        $this->assertEquals(11, $this->statement->current()->getReceiptId());
-
-        $this->assertEquals(22, $this->statement->next()->getReceiptId());
 
         $this->statement->removeTransaction($transactionMock_2);
         $this->assertCount(1, $this->statement->getTransactions());

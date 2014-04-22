@@ -15,8 +15,13 @@ use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
  */
 class ABOParser extends Parser
 {
-    const LINE_TYPE_STATEMENT = 'statement';
+    const LINE_TYPE_STATEMENT   = 'statement';
     const LINE_TYPE_TRANSACTION = 'transaction';
+
+    const POSTING_CODE_DEBIT           = 1;
+    const POSTING_CODE_CREDIT          = 2;
+    const POSTING_CODE_DEBIT_REVERSAL  = 3;
+    const POSTING_CODE_CREDIT_REVERSAL = 4;
 
     /**
      * @var ABOStatement
@@ -44,8 +49,6 @@ class ABOParser extends Parser
                         $transaction = $this->parseTransactionLine($line);
                         $this->statement->addTransaction($transaction);
                         break;
-                    default:
-                        break;
                 }
             }
         }
@@ -65,6 +68,7 @@ class ABOParser extends Parser
      * @param string $line
      * @throws \Exception
      */
+    /** @noinspection PhpInconsistentReturnPointsInspection */
     protected function getLineType($line)
     {
         switch (substr($line, 0, 3)) {
@@ -72,8 +76,6 @@ class ABOParser extends Parser
                 return self::LINE_TYPE_STATEMENT;
             case '075':
                 return self::LINE_TYPE_TRANSACTION;
-            default:
-                return false;
         }
     }
 
@@ -189,18 +191,18 @@ class ABOParser extends Parser
 
         # Debit / Credit
         $amount = ltrim(substr($line, 48, 12), '0') / 100;
-        $accountingCode = substr($line, 60, 1);
-        switch ($accountingCode) {
-            case '1':
+        $postingCode = substr($line, 60, 1);
+        switch ($postingCode) {
+            case self::POSTING_CODE_DEBIT:
                 $transaction->setDebit($amount);
                 break;
-            case '2':
+            case self::POSTING_CODE_CREDIT:
                 $transaction->setCredit($amount);
                 break;
-            case '4':
+            case self::POSTING_CODE_DEBIT_REVERSAL:
                 $transaction->setDebit($amount * (-1));
                 break;
-            case '5':
+            case self::POSTING_CODE_CREDIT_REVERSAL:
                 $transaction->setCredit($amount * (-1));
                 break;
         }
@@ -213,10 +215,10 @@ class ABOParser extends Parser
         $constantSymbol = ltrim(substr($line, 77, 4), '0');
         $transaction->setConstantSymbol($constantSymbol);
 
-        # Account number
-        $accountNumber = ltrim(substr($line, 19, 16), '0');
+        # Counter account number
+        $counterAccountNumber = ltrim(substr($line, 19, 16), '0');
         $codeOfBank = substr($line, 73, 4);
-        $transaction->setAccountNumber($accountNumber . '/' . $codeOfBank);
+        $transaction->setCounterAccountNumber($counterAccountNumber . '/' . $codeOfBank);
 
         # Specific symbol
         $specificSymbol = ltrim(substr($line, 81, 10), '0');

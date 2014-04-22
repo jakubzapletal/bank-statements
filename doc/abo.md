@@ -63,7 +63,8 @@ internal format description below.
 2.  Account number of the partner organisation.
 3.  Item identification number – document number supplemented with leading zeros.
 4.  The detail is related to the detail with Sequence No. 2 and its content is specified as follows: “1” – debit
-item, “2” – credit item, “3” – debit entry reversal, “4” – credit item reversal.
+item, “2” – credit item, “3” – debit entry reversal, “4” – credit item reversal. **Beware, different banks may have
+different values!**
 5.  Constant symbol as such is usually stated on the 1st to the 4th position from the right, bank code of the
 bank that maintains account presented in the Field No. 3 is stated on the 5th to the 8th position from the
 right.
@@ -75,7 +76,7 @@ not additionally changed or partially paid, “Z” – item was changed, “C�
 additionally changed and partially paid.
 9.  The detail acquires different values depending on the input data character from the payer point of view.
 Values important for customers: r – always “1”, m – for operations in CZK “1”, oo – odd number (“01”) –
-payment, even number (“02”) – collection/deposit.
+payment, even number (“02”) – collection/deposit. **Beware, different banks may have different values!**
 10.  Amount is stated in hellers (the last two characters).
 
 

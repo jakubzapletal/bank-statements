@@ -7,10 +7,10 @@ class Transaction implements TransactionInterface
     /**
      * @var string
      */
-    protected $accountNumber;
+    protected $counterAccountNumber;
 
     /**
-     * @var int
+     * @var string
      */
     protected $receiptId;
 
@@ -52,19 +52,19 @@ class Transaction implements TransactionInterface
     /**
      * @return string
      */
-    public function getAccountNumber()
+    public function getCounterAccountNumber()
     {
-        return $this->accountNumber;
+        return $this->counterAccountNumber;
     }
 
     /**
-     * @param string $accountNumber
+     * @param $counterAccountNumber
      *
      * @return $this
      */
-    public function setAccountNumber($accountNumber)
+    public function setCounterAccountNumber($counterAccountNumber)
     {
-        $this->accountNumber = $accountNumber;
+        $this->counterAccountNumber = $counterAccountNumber;
 
         return $this;
     }
@@ -78,13 +78,13 @@ class Transaction implements TransactionInterface
     }
 
     /**
-     * @param int $constantSymbol
+     * @param $constantSymbol
      *
      * @return $this
      */
     public function setConstantSymbol($constantSymbol)
     {
-        $this->constantSymbol = $constantSymbol;
+        $this->constantSymbol = (int) $constantSymbol;
 
         return $this;
     }
@@ -98,7 +98,7 @@ class Transaction implements TransactionInterface
     }
 
     /**
-     * @param float $credit
+     * @param $credit
      *
      * @return $this
      */
@@ -110,7 +110,7 @@ class Transaction implements TransactionInterface
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getDateCreated()
     {
@@ -138,7 +138,7 @@ class Transaction implements TransactionInterface
     }
 
     /**
-     * @param float $debit
+     * @param $debit
      *
      * @return $this
      */
@@ -158,7 +158,7 @@ class Transaction implements TransactionInterface
     }
 
     /**
-     * @param string $note
+     * @param $note
      *
      * @return $this
      */
@@ -170,7 +170,7 @@ class Transaction implements TransactionInterface
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getReceiptId()
     {
@@ -178,7 +178,7 @@ class Transaction implements TransactionInterface
     }
 
     /**
-     * @param int $receiptId
+     * @param $receiptId
      *
      * @return $this
      */
@@ -198,13 +198,13 @@ class Transaction implements TransactionInterface
     }
 
     /**
-     * @param int $specificSymbol
+     * @param $specificSymbol
      *
      * @return $this
      */
     public function setSpecificSymbol($specificSymbol)
     {
-        $this->specificSymbol = $specificSymbol;
+        $this->specificSymbol = (int) $specificSymbol;
 
         return $this;
     }
@@ -218,13 +218,13 @@ class Transaction implements TransactionInterface
     }
 
     /**
-     * @param int $variableSymbol
+     * @param $variableSymbol
      *
      * @return $this
      */
     public function setVariableSymbol($variableSymbol)
     {
-        $this->variableSymbol = $variableSymbol;
+        $this->variableSymbol = (int) $variableSymbol;
 
         return $this;
     }

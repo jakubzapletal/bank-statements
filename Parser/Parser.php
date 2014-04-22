@@ -24,6 +24,7 @@ class Parser implements ParserInterface
         }
 
         $this->statement = $this->getStatementClass();
+        $this->statement->addTransaction($this->getTransactionClass());
 
         return $this->statement;
     }

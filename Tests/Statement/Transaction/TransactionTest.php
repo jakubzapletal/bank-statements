@@ -16,12 +16,12 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
         $this->transaction = new Transaction();
     }
 
-    public function testAccountNumber()
+    public function testCounterAccountNumber()
     {
-        $accountNumber = '123456/7890';
+        $counterAccountNumber = '123456/7890';
 
-        $this->transaction->setAccountNumber($accountNumber);
-        $this->assertEquals($accountNumber, $this->transaction->getAccountNumber());
+        $this->transaction->setCounterAccountNumber($counterAccountNumber);
+        $this->assertEquals($counterAccountNumber, $this->transaction->getCounterAccountNumber());
     }
 
     public function testConstantSymbol()

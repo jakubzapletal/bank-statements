@@ -27,7 +27,7 @@ class Statement implements StatementInterface, \Countable, \Iterator
     protected $creditTurnover;
 
     /**
-     * @var int
+     * @var string
      */
     protected $serialNumber;
 
@@ -50,7 +50,7 @@ class Statement implements StatementInterface, \Countable, \Iterator
     }
 
     /**
-     * @param float $balance
+     * @param $balance
      *
      * @return $this
      */
@@ -70,7 +70,7 @@ class Statement implements StatementInterface, \Countable, \Iterator
     }
 
     /**
-     * @param float $creditTurnover
+     * @param $creditTurnover
      *
      * @return $this
      */
@@ -82,7 +82,7 @@ class Statement implements StatementInterface, \Countable, \Iterator
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getDateCreated()
     {
@@ -102,7 +102,7 @@ class Statement implements StatementInterface, \Countable, \Iterator
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getSerialNumber()
     {
@@ -110,7 +110,7 @@ class Statement implements StatementInterface, \Countable, \Iterator
     }
 
     /**
-     * @param int $serialNumber
+     * @param $serialNumber
      *
      * @return $this
      */
@@ -130,7 +130,7 @@ class Statement implements StatementInterface, \Countable, \Iterator
     }
 
     /**
-     * @param float $debitTurnover
+     * @param $debitTurnover
      *
      * @return $this
      */
@@ -150,7 +150,7 @@ class Statement implements StatementInterface, \Countable, \Iterator
     }
 
     /**
-     * @param string $accountNumber
+     * @param $accountNumber
      *
      * @return $this
      */
@@ -181,11 +181,10 @@ class Statement implements StatementInterface, \Countable, \Iterator
         foreach ($this->transactions as $addedTransaction) {
             if ($transaction === $addedTransaction) {
                 $added = true;
-                break;
             }
         }
 
-        if ($added === false) {
+        if ($added !== true) {
             $this->transactions[] = $transaction;
         }
 
@@ -221,7 +220,7 @@ class Statement implements StatementInterface, \Countable, \Iterator
     /**
      * @see \Iterator::current()
      *
-     * @return mixed
+     * @return TransactionInterface
      */
     public function current()
     {
@@ -241,7 +240,7 @@ class Statement implements StatementInterface, \Countable, \Iterator
     /**
      * @see \Iterator::next()
      *
-     * @return mixed
+     * @return TransactionInterface
      */
     public function next()
     {

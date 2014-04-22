@@ -11,9 +11,28 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      */
     protected $parser;
 
+    /**
+     * @var \SplFileObject
+     */
+    protected $file;
+
     protected function setUp()
     {
         $this->parser = new Parser();
+
+        $this->file = new \SplFileObject(tempnam(sys_get_temp_dir(), 'test_'), 'w+');
+    }
+
+    public function testParse()
+    {
+        $statement = $this->parser->parse($this->file->getRealPath());
+
+        $this->assertInstanceOf(
+            '\JakubZapletal\Component\BankStatement\Statement\Statement',
+            $statement
+        );
+
+        $this->assertSame($statement, $this->parser->getStatement());
     }
 
     /**
@@ -23,5 +42,6 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     {
         $this->parser->parse('file.tmp');
     }
+
 }
  
