@@ -8,6 +8,8 @@ use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
 /**
  * The ABO format is commonly used for exchanging financial messages in the Czech Republic and Slovakia
  *
+ * @see https://github.com/jakubzapletal/bank-statements/blob/master/doc/abo.md
+ *
  * Class ABOParser
  * @package JakubZapletal\Component\BankStatement\Parser
  */
@@ -76,6 +78,27 @@ class ABOParser extends Parser
     }
 
     /**
+     * Sequence No. | Name | F/V | Minimum Length | Maximum Length | Content | Comment
+     * -------------|------|-----|----------------|----------------|---------|--------
+     * 1  | Type of record              | F | 3  | 074                  |
+     * 2  | Client account number       | F | 16 | NNNNNNNNNNNNNNNN     | 1
+     * 3  | Abbreviated client name     | F | 20 | AAAAAAAAAAAAAAAAAAAA |
+     * 4  | Old balance name            | F | 6  | ddmmyy               |
+     * 5  | Old balance                 | F | 14 | NNNNNNNNNNNNNN       | 5
+     * 6  | Old balance sign            | F | 1  | (plus) or (minus)    | 2
+     * 7  | New balance                 | F | 14 | NNNNNNNNNNNNNN       | 5
+     * 8  | New balance sign            | F | 1  | (plus) or (minus)    | 2
+     * 9  | Transactions – debit        | F | 14 | NNNNNNNNNNNNNN       | 5
+     * 10 | Sign of debit transactions  | F | 1  | (plus) or (minus)    | 3
+     * 11 | Transactions – credit       | F | 14 | NNNNNNNNNNNNNN       | 5
+     * 12 | Sign of credit transactions | F | 1  | (plus) or (minus)    | 3
+     * 13 | Statement sequence number   | F | 3  | NNN                  |
+     * 14 | Posting date                | F | 6  | ddmmyy               |
+     * 15 | Filler                      | F | 14 | (space)              | 4
+     * 16 | End-of-record character     | F | 2  | CR LF                |
+     *
+     * @see https://github.com/jakubzapletal/bank-statements/blob/master/doc/abo.md
+     *
      * @param string $line
      */
     protected function parseStatementLine($line)
@@ -132,6 +155,26 @@ class ABOParser extends Parser
     }
 
     /**
+     * Sequence No. | Name | F/V | Minimum Length | Maximum Length | Content | Comment
+     * -------------|------|-----|----------------|----------------|---------|--------
+     * 1  | Type of record          | F  | 3  | 075
+     * 2  | Client account number   | F  | 16 | NNNNNNNNNNNNNNNN     | 1
+     * 3  | Counter-account number  | F  | 16 | NNNNNNNNNNNNNNNN     | 1,2
+     * 4  | Document number         | F  | 13 | AAAAAAAAAAAAA        | 3
+     * 5  | Amount                  | F  | 12 | NNNNNNNNNNNN         | 10
+     * 6  | Posting code            | F  | 1  | N                    | 4
+     * 7  | V-symbol                | F  | 10 | NNNNNNNNNN           |
+     * 8  | K-symbol.               | F  | 10 | NNNNNNNNNN           | 5
+     * 9  | S-symbol                | F  | 10 | NNNNNNNNNN           |
+     * 10 | Value                   | F  | 6  | ddmmyy               | 6
+     * 11 | Additional detail       | F  | 20 | AAAAAAAAAAAAAAAAAAAA | 7
+     * 12 | Change of item code     | F  | 1  | A                    | 8
+     * 13 | Type of data            | F  | 4  | rmoo                 | 9
+     * 14 | Due date                | F  | 6  | ddmmyy               |
+     * 15 | End-of-record character | F  | 2  | CR LF                |
+     *
+     * @see https://github.com/jakubzapletal/bank-statements/blob/master/doc/abo.md
+     *
      * @param string $line
      *
      * @return Transaction

@@ -27,6 +27,7 @@ Sequence No. | Name | F/V | Minimum Length | Maximum Length | Content | Comment
 16 | End-of-record character     | F | 2  | CR LF                |
 
 **Comments:**
+
 1.  Depending on the application settings the data can be stated in the so-called internal format – see the
 internal format description below.
 2.  “Plus” sign in case of positive balance and the “minus” sign in case of negative balance.
@@ -56,6 +57,7 @@ Sequence No. | Name | F/V | Minimum Length | Maximum Length | Content | Comment
 15 | End-of-record character | F  | 2  | CR LF                |
 
 **Comments:**
+
 1.  Depending on the application settings the data can be stated in the so-called internal format – see the
 internal format description below.
 2.  Account number of the partner organisation.
@@ -75,3 +77,18 @@ additionally changed and partially paid.
 Values important for customers: r – always “1”, m – for operations in CZK “1”, oo – odd number (“01”) –
 payment, even number (“02”) – collection/deposit.
 10.  Amount is stated in hellers (the last two characters).
+
+
+#### Internal format of account number
+
+Internal format of account number is created through permutation according to the following principle:
+
+*  *Px* - prefix, position x.
+*  *Cx* - account number, position x.
+
+Format | Permutation
+-------|------------
+Account number  | P0P1P2P3P4P5C0C1C2C3C4C5C6C7C8C9
+Internal format | C9C7C8C5C0C1C2C3C4C6P1P2P3P4P5P6
+
+**This library use only standard account format.**
