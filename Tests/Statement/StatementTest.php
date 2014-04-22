@@ -32,14 +32,6 @@ class StatementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($creditTurnover, $this->statement->getCreditTurnover());
     }
 
-    public function testCurrencyCode()
-    {
-        $currencyCode = 'CZK';
-
-        $this->statement->setCurrencyCode($currencyCode);
-        $this->assertEquals($currencyCode, $this->statement->getCurrencyCode());
-    }
-
     public function testDateCreated()
     {
         $date = new \DateTime('2014-05-28');

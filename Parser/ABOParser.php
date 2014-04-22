@@ -5,6 +5,12 @@ namespace JakubZapletal\Component\BankStatement\Parser;
 use JakubZapletal\Component\BankStatement\Statement\ABOStatement;
 use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
 
+/**
+ * The ABO format is commonly used for exchanging financial messages in the Czech Republic and Slovakia
+ *
+ * Class ABOParser
+ * @package JakubZapletal\Component\BankStatement\Parser
+ */
 class ABOParser extends Parser
 {
     const LINE_TYPE_STATEMENT = 'statement';
@@ -25,10 +31,6 @@ class ABOParser extends Parser
         $file = new \SplFileObject($filePath);
 
         $this->statement = $this->getStatementClass();
-
-        # Currency code
-        $filename = $file->getBasename('.' . $file->getExtension());
-        $this->statement->setCurrencyCode(substr($filename, -3));
 
         foreach ($file as $line) {
             if ($file->valid()) {

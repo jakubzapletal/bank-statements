@@ -37,11 +37,6 @@ class Statement implements StatementInterface, \Countable, \Iterator
     protected $dateCreated;
 
     /**
-     * @var string
-     */
-    protected $currencyCode;
-
-    /**
      * @var TransactionInterface[]
      */
     protected $transactions = [];
@@ -82,26 +77,6 @@ class Statement implements StatementInterface, \Countable, \Iterator
     public function setCreditTurnover($creditTurnover)
     {
         $this->creditTurnover = (float) $creditTurnover;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCurrencyCode()
-    {
-        return $this->currencyCode;
-    }
-
-    /**
-     * @param string $currencyCode
-     *
-     * @return $this
-     */
-    public function setCurrencyCode($currencyCode)
-    {
-        $this->currencyCode = $currencyCode;
 
         return $this;
     }
