@@ -29,6 +29,33 @@ about a statement and an array of transactions by `JakubZapletal\Component\BankS
  * Komerční banka (CZ):
 
 
-### Contributing
+## Installation
+
+Note that Bank Statements is [PSR-4](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md) compliant:
+
+### Composer
+
+If you don't have Composer [install](http://getcomposer.org/doc/00-intro.md#installation) it:
+
+```bash
+$ curl -s https://getcomposer.org/installer | php
+```
+
+Add `jakubzapletal/bank-statements` to composer.json
+
+```json
+"require": {
+    "jakubzapletal/bank-statements": "1.0.*@dev"
+}
+```
+
+Refresh your dependencies:
+
+```bash
+$ php composer.phar update
+```
+
+
+## Contributing
 
 Please see the [Contribution Guidelines](contributing.md).
