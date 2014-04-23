@@ -7,7 +7,11 @@ PHP library to parse bank account statements
 
 ### Supported formats
 
-* [ABO](doc/abo.md)
- * Česká spořitelna (CZ) `JakubZapletal\Component\BankStatement\Parser\ABOParser`
- * Fio banka (CZ) `JakubZapletal\Component\BankStatement\Parser\ABO\FioBankaCZParser`
- * Raiffeisenbank (CZ) `JakubZapletal\Component\BankStatement\Parser\ABO\RaiffeisenbankCZParser`
+* [ABO](doc/abo.md) (`*.gpc`)
+ * Česká spořitelna (CZ) `JakubZapletal\Component\BankStatement\Parser\ABO\CeskaSporitelnaCZParser`
+ * Fio banka (CZ) `JakubZapletal\Component\BankStatement\Parser\ABOParser`
+ * Komerční banka, alias KM format (CZ) `JakubZapletal\Component\BankStatement\Parser\ABOParser`
+ * Raiffeisenbank (CZ) `JakubZapletal\Component\BankStatement\Parser\ABOParser`
+* XML
+ * ČSOB (CZ)
+ * GE Money Bank (CZ)
