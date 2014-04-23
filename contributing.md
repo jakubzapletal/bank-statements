@@ -9,7 +9,7 @@ new features and patches.
 ### Getting Started
 
 1. Make sure you have a [GitHub](https://github.com/) account.
-2. Open a [new issue](issues), assuming one does not already exist.
+2. Open a [new issue](https://github.com/jakubzapletal/bank-statements/issues), assuming one does not already exist.
 3. Clearly describe the issue including steps to reproduce when it is a bug.
 
 
@@ -46,6 +46,6 @@ It's alright. We've all been there.
 
 There are usually several TODO comments scattered around the codebase, maybe
 check them out and see if you have ideas, or can help with them. Also, check
-the [open issues](issues) in case there's something that sparks your interest. What
-about documentation?  I suck at english so if you're fluent with it (or notice
-any error), why not help with that?
+the [open issues](https://github.com/jakubzapletal/bank-statements/issues) in
+case there's something that sparks your interest. What about documentation?
+I suck at english so if you're fluent with it (or notice any error), why not help with that?

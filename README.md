@@ -3,9 +3,10 @@
 [![Build Status](https://travis-ci.org/jakubzapletal/bank-statements.svg?branch=master)](https://travis-ci.org/jakubzapletal/bank-statements)
 [![Coverage Status](https://coveralls.io/repos/jakubzapletal/bank-statements/badge.png?branch=master)](https://coveralls.io/r/jakubzapletal/bank-statements?branch=master)
 
-PHP library to parse bank account statements. The purpose of this library is to standardize output from bank statement
-and then easy to process in your application. Output of parsing includes `JakubZapletal\Component\BankStatement\Statement\StatementInterface` containing detail information
-about statement and array of transactions by `JakubZapletal\Component\BankStatement\Statement\Transaction\TransactionInterface`.
+This is a PHP library to parse bank account statements. The purpose of the library is to standardize outputs from bank statements
+and then easy to process in your application. The output of parsing includes
+`JakubZapletal\Component\BankStatement\Statement\StatementInterface` containing detail informations
+about a statement and an array of transactions by `JakubZapletal\Component\BankStatement\Statement\Transaction\TransactionInterface`.
 
 
 ### Supported formats/bank list
