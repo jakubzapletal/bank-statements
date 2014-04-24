@@ -93,6 +93,8 @@ class ABOParser extends Parser
             case '075':
                 return self::LINE_TYPE_TRANSACTION;
         }
+
+        return null;
     }
 
     /**

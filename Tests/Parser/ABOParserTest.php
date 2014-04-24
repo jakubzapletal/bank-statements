@@ -84,6 +84,9 @@ class ABOParserTest extends \PHPUnit_Framework_TestCase
         $fileObject->fwrite(
             '0750000000000012345000000000025678900000000020020000000600001000000002100200000220000000023070114Tran 2              01101070114' . PHP_EOL
         );
+        $fileObject->fwrite(
+            '0760000000000012345000000000025678900000000020020000000600001000000002100200000220000000023070114Tran 2              01101070114' . PHP_EOL
+        );
         $statement = $method->invokeArgs($parser, [$fileObject]);
 
         $this->assertInstanceOf(
