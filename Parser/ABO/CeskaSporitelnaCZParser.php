@@ -2,9 +2,9 @@
 
 namespace JakubZapletal\Component\BankStatement\Parser\ABO;
 
-use JakubZapletal\Component\BankStatement\Parser\Parser;
+use JakubZapletal\Component\BankStatement\Parser\ABOParser;
 
-class CeskaSporitelnaCZParser extends Parser
+class CeskaSporitelnaCZParser extends ABOParser
 {
     const POSTING_CODE_DEBIT           = 1;
     const POSTING_CODE_CREDIT          = 2;

@@ -87,7 +87,7 @@ class ABOParserTest extends \PHPUnit_Framework_TestCase
         $statement = $method->invokeArgs($parser, [$fileObject]);
 
         $this->assertInstanceOf(
-            '\JakubZapletal\Component\BankStatement\Statement\ABOStatement',
+            '\JakubZapletal\Component\BankStatement\Statement\Statement',
             $statement
         );
 

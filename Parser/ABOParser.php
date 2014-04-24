@@ -2,7 +2,7 @@
 
 namespace JakubZapletal\Component\BankStatement\Parser;
 
-use JakubZapletal\Component\BankStatement\Statement\ABOStatement;
+use JakubZapletal\Component\BankStatement\Statement\Statement;
 use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
 
 /**
@@ -10,7 +10,7 @@ use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
  *
  * @see https://github.com/jakubzapletal/bank-statements/blob/master/doc/abo.md
  *
- * Class ABOParser
+ * Class Statement
  * @package JakubZapletal\Component\BankStatement\Parser
  */
 class ABOParser extends Parser
@@ -24,14 +24,9 @@ class ABOParser extends Parser
     const POSTING_CODE_CREDIT_REVERSAL = 5;
 
     /**
-     * @var ABOStatement
-     */
-    protected $statement;
-
-    /**
      * @param string $filePath
      *
-     * @return ABOStatement
+     * @return Statement
      * @throws \RuntimeException
      */
     public function parseFile($filePath)
@@ -44,7 +39,7 @@ class ABOParser extends Parser
     /**
      * @param string $content
      *
-     * @return ABOStatement
+     * @return Statement
      * @throws \InvalidArgumentException
      */
     public function parseContent($content)
@@ -62,7 +57,7 @@ class ABOParser extends Parser
     /**
      * @param \SplFileObject $fileObject
      *
-     * @return ABOStatement
+     * @return Statement
      */
     protected function parseFileObject(\SplFileObject $fileObject)
     {
@@ -83,14 +78,6 @@ class ABOParser extends Parser
         }
 
         return $this->statement;
-    }
-
-    /**
-     * @return ABOStatement
-     */
-    protected function getStatementClass()
-    {
-        return new ABOStatement();
     }
 
     /**

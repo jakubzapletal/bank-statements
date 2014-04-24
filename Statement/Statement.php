@@ -37,6 +37,16 @@ class Statement implements StatementInterface, \Countable, \Iterator
     protected $dateCreated;
 
     /**
+     * @var \DateTime
+     */
+    protected $dateLastBalance;
+
+    /**
+     * @var float
+     */
+    protected $lastBalance;
+
+    /**
      * @var TransactionInterface[]
      */
     protected $transactions = [];
@@ -157,6 +167,46 @@ class Statement implements StatementInterface, \Countable, \Iterator
     public function setAccountNumber($accountNumber)
     {
         $this->accountNumber = $accountNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDateLastBalance()
+    {
+        return $this->dateLastBalance;
+    }
+
+    /**
+     * @param \DateTime $dateLastBalance
+     *
+     * @return $this
+     */
+    public function setDateLastBalance(\DateTime $dateLastBalance)
+    {
+        $this->dateLastBalance = $dateLastBalance;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getLastBalance()
+    {
+        return $this->lastBalance;
+    }
+
+    /**
+     * @param float $lastBalance
+     *
+     * @return $this
+     */
+    public function setLastBalance($lastBalance)
+    {
+        $this->lastBalance = (float) $lastBalance;
 
         return $this;
     }
