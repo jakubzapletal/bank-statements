@@ -36,12 +36,14 @@ class CSOBCZParser extends XMLParser
 
         $crawler = $crawler->filter('FINSTA > FINSTA03');
 
-        $this->parseStatementNode($crawler);
+        if ($crawler !== null) {
+            $this->parseStatementNode($crawler);
 
-        $crawler->filter('FINSTA05')->each(function(Crawler $node){
-            $transaction = $this->parseTransactionNode($node);
-            $this->statement->addTransaction($transaction);
-        });
+            $crawler->filter('FINSTA05')->each(function (Crawler $node) {
+                $transaction = $this->parseTransactionNode($node);
+                $this->statement->addTransaction($transaction);
+            });
+        }
 
         return $this->statement;
     }
@@ -49,60 +51,61 @@ class CSOBCZParser extends XMLParser
     /**
      * @param Crawler $crawler
      */
-    protected function parseStatementNode(Crawler $crawler)
+    protected function parseStatementNode(Crawler $crawler = null)
     {
-        # Account number
-        $accountNumber = $crawler->filter('S25_CISLO_UCTU')->text();
-        $this->statement->setAccountNumber($accountNumber);
+        if ($crawler !== null) {
+            # Account number
+            $accountNumber = $crawler->filter('S25_CISLO_UCTU')->text();
+            $this->statement->setAccountNumber($accountNumber);
 
-        # Date last balance
-        $date = $crawler->filter('S60_DATUM')->text();
-        $dateLastBalance = \DateTime::createFromFormat('d.m.Y His', $date . ' 120000');
-        $dateLastBalance->modify('-1 DAY');
-        $this->statement->setDateLastBalance($dateLastBalance);
+            # Date last balance
+            $date = $crawler->filter('S60_DATUM')->text();
+            $dateLastBalance = \DateTime::createFromFormat('d.m.Y His', $date . ' 120000');
+            $this->statement->setDateLastBalance($dateLastBalance);
 
-        # Last balance
-        $lastBalance = abs(str_replace(',', '.', $crawler->filter('S60_CASTKA')->text()));
-        $postingCode = $crawler->filter('S60_CD_INDIK')->text();
-        switch ($postingCode) {
-            case self::POSTING_CODE_DEBIT:
-                $this->statement->setLastBalance($lastBalance * (-1));
-                break;
-            case self::POSTING_CODE_CREDIT:
-                $this->statement->setLastBalance($lastBalance);
-                break;
+            # Last balance
+            $lastBalance = abs(str_replace(',', '.', $crawler->filter('S60_CASTKA')->text()));
+            $postingCode = $crawler->filter('S60_CD_INDIK')->text();
+            switch ($postingCode) {
+                case self::POSTING_CODE_DEBIT:
+                    $this->statement->setLastBalance($lastBalance * (-1));
+                    break;
+                case self::POSTING_CODE_CREDIT:
+                    $this->statement->setLastBalance($lastBalance);
+                    break;
+            }
+
+            # Balance
+            $balance = abs(str_replace(',', '.', $crawler->filter('S62_CASTKA')->text()));
+            $postingCode = $crawler->filter('S62_CD_INDIK')->text();
+            switch ($postingCode) {
+                case self::POSTING_CODE_DEBIT:
+                    $this->statement->setBalance($balance * (-1));
+                    break;
+                case self::POSTING_CODE_CREDIT:
+                    $this->statement->setBalance($balance);
+                    break;
+            }
+
+            # Debit turnover
+            $debitTurnover = str_replace(',', '.', $crawler->filter('SUMA_DEBIT')->text());
+            $debitTurnover = str_replace('=', '', $debitTurnover);
+            $this->statement->setDebitTurnover($debitTurnover);
+
+            # Credit turnover
+            $creditTurnover = str_replace(',', '.', $crawler->filter('SUMA_KREDIT')->text());
+            $creditTurnover = str_replace('=', '', $creditTurnover);
+            $this->statement->setCreditTurnover($creditTurnover);
+
+            # Serial number
+            $serialNumber = $crawler->filter('S28_CISLO_VYPISU')->text();
+            $this->statement->setSerialNumber($serialNumber);
+
+            # Date created
+            $date = $crawler->filter('S62_DATUM')->text();
+            $dateCreated = \DateTime::createFromFormat('d.m.Y His', $date . ' 120000');
+            $this->statement->setDateCreated($dateCreated);
         }
-
-        # Balance
-        $balance = abs(str_replace(',', '.', $crawler->filter('S62_CASTKA')->text()));
-        $postingCode = $crawler->filter('S62_CD_INDIK')->text();
-        switch ($postingCode) {
-            case self::POSTING_CODE_DEBIT:
-                $this->statement->setBalance($balance * (-1));
-                break;
-            case self::POSTING_CODE_CREDIT:
-                $this->statement->setBalance($balance);
-                break;
-        }
-
-        # Debit turnover
-        $debitTurnover = str_replace(',', '.', $crawler->filter('SUMA_DEBIT')->text());
-        $debitTurnover = str_replace('=', '', $debitTurnover);
-        $this->statement->setDebitTurnover($debitTurnover);
-
-        # Credit turnover
-        $creditTurnover = str_replace(',', '.', $crawler->filter('SUMA_KREDIT')->text());
-        $creditTurnover = str_replace('=', '', $creditTurnover);
-        $this->statement->setCreditTurnover($creditTurnover);
-
-        # Serial number
-        $serialNumber = $crawler->filter('S28_CISLO_VYPISU')->text();
-        $this->statement->setSerialNumber($serialNumber);
-
-        # Date created
-        $date = $crawler->filter('S62_DATUM')->text();
-        $dateCreated = \DateTime::createFromFormat('d.m.Y His', $date . ' 120000');
-        $this->statement->setDateCreated($dateCreated);
     }
 
     /**
@@ -110,7 +113,7 @@ class CSOBCZParser extends XMLParser
      *
      * @return \JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction
      */
-    protected function parseTransactionNode(Crawler $crawler)
+    protected function parseTransactionNode(Crawler $crawler = null)
     {
         $transaction = $this->getTransactionClass();
 
