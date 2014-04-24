@@ -7,59 +7,92 @@ use JakubZapletal\Component\BankStatement\Parser\ABOParser;
 class ABOParserTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ABOParser
+     * @var string
      */
-    protected $parser;
+    protected $parserClassName = '\JakubZapletal\Component\BankStatement\Parser\ABOParser';
 
-    /**
-     * @var \SplFileObject
-     */
-    protected $filePositive;
-
-    /**
-     * @var \SplFileObject
-     */
-    protected $fileNegative;
-
-    protected function setUp()
+    public function testParseFile()
     {
-        $this->parser = new ABOParser();
+        $fileObject = new \SplFileObject(tempnam(sys_get_temp_dir(), 'test_'), 'w+');
 
-        $this->filePositive = new \SplFileObject(tempnam(sys_get_temp_dir(), 'test_'), 'w+');
-        $this->filePositive->fwrite(
-            '0740000000000012345Test s.r.o.         01011400000000100000+00000000080000+00000000060000+00000000040000+002010214              ' . PHP_EOL
-        );
-        $this->filePositive->fwrite(
-            '0750000000000012345000000000015678900000000020010000000400002000000001100100000120000000013050114Tran 1              01102050114' . PHP_EOL
-        );
-        $this->filePositive->fwrite(
-            '0750000000000012345000000000025678900000000020020000000600001000000002100200000220000000023070114Tran 2              01101070114' . PHP_EOL
-        );
+        $parserMock = $this->getMock($this->parserClassName, ['parseFileObject']);
+        $parserMock
+            ->expects($this->once())
+            ->method('parseFileObject')
+            ->with($this->equalTo($fileObject))
+            ->will($this->returnArgument(0))
+        ;
 
-        $this->fileNegative = new \SplFileObject(tempnam(sys_get_temp_dir(), 'test_'), 'w+');
-        $this->fileNegative->fwrite(
-            '0740000000000012345Test s.r.o.         01011400000000100000-00000000080000-00000000060000-00000000040000-002010214              ' . PHP_EOL
-        );
-        $this->fileNegative->fwrite(
-            '0750000000000012345000000000015678900000000020010000000400005000000001100100000120000000013050114Tran 1              01102050114' . PHP_EOL
-        );
-        $this->fileNegative->fwrite(
-            '0750000000000012345000000000025678900000000020020000000600004000000002100200000220000000023070114Tran 2              01101070114' . PHP_EOL
+        $this->assertSame(
+            $fileObject->getRealPath(),
+            $parserMock->parseFile($fileObject->getRealPath())->getRealPath()
         );
     }
 
-    public function testParse()
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testParseFileException()
     {
+        $parser = new ABOParser();
+        $parser->parseFile('test.file');
+    }
+
+    public function testParseContent()
+    {
+        $content = 'test';
+
+        $parserMock = $this->getMock($this->parserClassName, ['parseFileObject']);
+        $parserMock
+            ->expects($this->once())
+            ->method('parseFileObject')
+            ->with($this->isInstanceOf('\SplFileObject'))
+            ->will($this->returnValue($content))
+        ;
+
+        $this->assertEquals(
+            $content,
+            $parserMock->parseContent($content)
+        );
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testParseContentException()
+    {
+        $parser = new ABOParser();
+        $parser->parseContent(123);
+    }
+
+    public function testParseFileObject()
+    {
+        $parser = new ABOParser();
+
+        $reflectionParser = new \ReflectionClass($this->parserClassName);
+        $method = $reflectionParser->getMethod('parseFileObject');
+        $method->setAccessible(true);
+
         # Positive statement
-        $statement = $this->parser->parse($this->filePositive->getRealPath());
+        $fileObject = new \SplFileObject(tempnam(sys_get_temp_dir(), 'test_'), 'w+');
+        $fileObject->fwrite(
+            '0740000000000012345Test s.r.o.         01011400000000100000+00000000080000+00000000060000+00000000040000+002010214              ' . PHP_EOL
+        );
+        $fileObject->fwrite(
+            '0750000000000012345000000000015678900000000020010000000400002000000001100100000120000000013050114Tran 1              01102050114' . PHP_EOL
+        );
+        $fileObject->fwrite(
+            '0750000000000012345000000000025678900000000020020000000600001000000002100200000220000000023070114Tran 2              01101070114' . PHP_EOL
+        );
+        $statement = $method->invokeArgs($parser, [$fileObject]);
 
         $this->assertInstanceOf(
-            '\JakubZapletal\Component\BankStatement\Statement\Statement',
+            '\JakubZapletal\Component\BankStatement\Statement\ABOStatement',
             $statement
         );
 
         # Statement
-        $this->assertSame($statement, $this->parser->getStatement());
+        $this->assertSame($statement, $parser->getStatement());
         $this->assertEquals('12345', $statement->getAccountNumber());
         $this->assertEquals(new \DateTime('2014-01-01 12:00:00'), $statement->getDateLastBalance());
         $this->assertSame(1000.00, $statement->getLastBalance());
@@ -89,7 +122,17 @@ class ABOParserTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(600.00, $transaction->getDebit());
 
         # Negative statement
-        $statement = $this->parser->parse($this->fileNegative->getRealPath());
+        $fileObject = new \SplFileObject(tempnam(sys_get_temp_dir(), 'test_'), 'w+');
+        $fileObject->fwrite(
+            '0740000000000012345Test s.r.o.         01011400000000100000-00000000080000-00000000060000-00000000040000-002010214              ' . PHP_EOL
+        );
+        $fileObject->fwrite(
+            '0750000000000012345000000000015678900000000020010000000400005000000001100100000120000000013050114Tran 1              01102050114' . PHP_EOL
+        );
+        $fileObject->fwrite(
+            '0750000000000012345000000000025678900000000020020000000600004000000002100200000220000000023070114Tran 2              01101070114' . PHP_EOL
+        );
+        $statement = $method->invokeArgs($parser, [$fileObject]);
 
         # Statement
         $this->assertSame(-1000.00, $statement->getLastBalance());
@@ -110,9 +153,14 @@ class ABOParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Exception
      */
-    public function testParseException()
+    public function testParseFileObjectException()
     {
-        $this->parser->parse('file.tmp');
+        $parser = new ABOParser();
+
+        $reflectionParser = new \ReflectionClass($this->parserClassName);
+        $method = $reflectionParser->getMethod('parseFileObject');
+        $method->setAccessible(true);
+        $method->invoke($parser, ['test']);
     }
 }
  

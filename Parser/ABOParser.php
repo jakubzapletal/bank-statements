@@ -30,17 +30,46 @@ class ABOParser extends Parser
 
     /**
      * @param string $filePath
+     *
      * @return ABOStatement
-     * @throws \Exception
+     * @throws \RuntimeException
      */
-    public function parse($filePath)
+    public function parseFile($filePath)
     {
-        $file = new \SplFileObject($filePath);
+        $fileObject = new \SplFileObject($filePath);
 
+        return $this->parseFileObject($fileObject);
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return ABOStatement
+     * @throws \InvalidArgumentException
+     */
+    public function parseContent($content)
+    {
+        if (is_string($content) === false) {
+            throw new \InvalidArgumentException('Argument "$content" isn\'t a string type');
+        }
+
+        $fileObject = new \SplTempFileObject();
+        $fileObject->fwrite($content);
+
+        return $this->parseFileObject($fileObject);
+    }
+
+    /**
+     * @param \SplFileObject $fileObject
+     *
+     * @return ABOStatement
+     */
+    protected function parseFileObject(\SplFileObject $fileObject)
+    {
         $this->statement = $this->getStatementClass();
 
-        foreach ($file as $line) {
-            if ($file->valid()) {
+        foreach ($fileObject as $line) {
+            if ($fileObject->valid()) {
                 switch ($this->getLineType($line)) {
                     case self::LINE_TYPE_STATEMENT:
                         $this->parseStatementLine($line);

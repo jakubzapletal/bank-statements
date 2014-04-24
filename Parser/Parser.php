@@ -5,7 +5,7 @@ namespace JakubZapletal\Component\BankStatement\Parser;
 use JakubZapletal\Component\BankStatement\Statement\Statement;
 use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
 
-class Parser implements ParserInterface
+abstract class Parser implements ParserInterface
 {
     /**
      * @var Statement
@@ -16,18 +16,17 @@ class Parser implements ParserInterface
      * @param string $filePath
      *
      * @return Statement
+     * @throw \Exception
      */
-    public function parse($filePath)
-    {
-        if (file_exists($filePath) === false) {
-            throw new \Exception('File "' . $filePath . '" doesn\'t exists');
-        }
+    public abstract function parseFile($filePath);
 
-        $this->statement = $this->getStatementClass();
-        $this->statement->addTransaction($this->getTransactionClass());
-
-        return $this->statement;
-    }
+    /**
+     * @param string $content
+     *
+     * @return Statement
+     * @throw \Exception
+     */
+    public abstract function parseContent($content);
 
     /**
      * @return Statement

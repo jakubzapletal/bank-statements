@@ -9,9 +9,9 @@
 [![License](https://poser.pugx.org/jakubzapletal/bank-statements/license.png)](https://packagist.org/packages/jakubzapletal/bank-statements)
 
 This is a PHP library to parse bank account statements. The purpose of the library is to standardize outputs from bank statements
-and then easy to process in your application. The output of parsing includes
+and then easy to process in your application. The output of parsing is instance of
 `JakubZapletal\Component\BankStatement\Statement\StatementInterface` containing detail informations
-about a statement and an array of transactions by `JakubZapletal\Component\BankStatement\Statement\Transaction\TransactionInterface`.
+about a statement and an array of transactions instanced of `JakubZapletal\Component\BankStatement\Statement\Transaction\TransactionInterface`.
 
 
 ### Supported formats/bank list
@@ -41,7 +41,7 @@ If you don't have Composer [install](http://getcomposer.org/doc/00-intro.md#inst
 $ curl -s https://getcomposer.org/installer | php
 ```
 
-Add `jakubzapletal/bank-statements` to composer.json
+Add `jakubzapletal/bank-statements` to `composer.json`:
 
 ```json
 "require": {
