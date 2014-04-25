@@ -16,7 +16,7 @@ about a statement and an array of transactions instanced of `JakubZapletal\Compo
 
 ### Supported formats/bank list
 
-* [ABO](doc/abo.md) (`*.gpc`)
+* ABO (`*.gpc`) [[doc](doc/abo.md)]
  * Česká spořitelna (CZ): `JakubZapletal\Component\BankStatement\Parser\ABO\CeskaSporitelnaCZParser`
  * ČSOB (CZ): `JakubZapletal\Component\BankStatement\Parser\ABOParser`
  * Fio banka (CZ): `JakubZapletal\Component\BankStatement\Parser\ABOParser`
@@ -24,9 +24,8 @@ about a statement and an array of transactions instanced of `JakubZapletal\Compo
  * Komerční banka (CZ), *alias KM format*: `JakubZapletal\Component\BankStatement\Parser\ABOParser`
  * Raiffeisenbank (CZ): `JakubZapletal\Component\BankStatement\Parser\ABOParser`
 * XML
- * ČSOB (CZ):
+ * ČSOB (CZ) [[doc](doc/xml/csob_cz.md)]: `JakubZapletal\Component\BankStatement\Parser\XML\CSOBCZParser`
 * CSV
- * Komerční banka (CZ):
 
 
 ## Installation
