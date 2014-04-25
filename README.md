@@ -75,7 +75,7 @@ JakubZapletal\Component\BankStatement\Statement\Transaction\TransactionInterface
 
 This behaviour ensures the **same approach to the parsing and results for all parsers**.
 
-All abstract classes and standard classes are easily extendable, allowing implement parsing process of any data.
+All abstract classes and standard classes are **easily extendable**, allowing implement parsing process of any data.
 
 The basic statement class:
 
