@@ -8,10 +8,11 @@
 [![Latest Unstable Version](https://poser.pugx.org/jakubzapletal/bank-statements/v/unstable.png)](https://packagist.org/packages/jakubzapletal/bank-statements)
 [![License](https://poser.pugx.org/jakubzapletal/bank-statements/license.png)](https://packagist.org/packages/jakubzapletal/bank-statements)
 
-This is a PHP library to parse bank account statements. The purpose of the library is to standardize outputs from bank statements
-and then easy to process in your application. The result of the parsing is an instance of:
+This is a PHP library to parse bank account statements. The purpose of this library is to make bank statements processing
+easy in your application in more standardadized way. The parser result is an instance of:
 `JakubZapletal\Component\BankStatement\Statement\StatementInterface` containing detail informations
-about a statement and an array of transactions instanced of `JakubZapletal\Component\BankStatement\Statement\Transaction\TransactionInterface`.
+about a statement and an array of `JakubZapletal\Component\BankStatement\Statement\Transaction\TransactionInterface` with further
+information about transactions.
 
 
 ### Supported formats/bank list
@@ -42,22 +43,14 @@ $ curl -s https://getcomposer.org/installer | php
 
 Add `jakubzapletal/bank-statements` to `composer.json`:
 
-```json
-"require": {
-    "jakubzapletal/bank-statements": "1.0.*@dev"
-}
-```
-
-Refresh your dependencies:
-
 ```bash
-$ php composer.phar update
+$ composer require "jakubzapletal/bank-statements:1.0.*@dev"
 ```
 
 
 ## Usage
 
-A parsing of each format is provided by a class implementing:
+Parsing of each format is provided by a class implementing:
 
 ```php
 JakubZapletal\Component\BankStatement\Parser\ParserInterface
@@ -80,9 +73,9 @@ The statement class includes transaction items, which are classes implementing:
 JakubZapletal\Component\BankStatement\Statement\Transaction\TransactionInterface
 ```
 
-This behaviour ensures the **same approach to the parsing and results for all cases**.
+This behaviour ensures the **same approach to the parsing and results for all parsers**.
 
-All abstract classes and standard classes are done to be easy to extend them and rewrite any part of the parsing process.
+All abstract classes and standard classes are easily extendable, allowing implement parsing process of any data.
 
 The basic statement class:
 
@@ -90,8 +83,8 @@ The basic statement class:
 JakubZapletal\Component\BankStatement\Statement\Statement
 ```
 
-is set to be **countable** and **traverseable**, so we can call functions `count()` or `foreach()` on this class.
-This functions manipulate with transactions inside the statement. If you need more functionality in the statement class,
+implements **countable** and **traverseable**, so we can call function `count()` and iterate with `foreach()` on this class.
+Keep in mind that transactions of the statements are used. If you need more functionality in the statement class,
 I recommend extend this class.
 
 ### Examples
@@ -115,13 +108,13 @@ $statement = $parser->parseContent($content);
 Manipulation with the statement:
 
 ```php
-echo count($statement); // echo count of transaction items
+echo count($statement); // echoes count of transaction items
 
 foreach ($statement as $transaction) {
     // do something with each transaction
 }
 
-echo $statement->getAccountNumber(); // echo an account number of the statement
+echo $statement->getAccountNumber(); // echoes an account number of the statement
 ```
 
 
