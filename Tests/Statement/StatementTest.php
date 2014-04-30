@@ -72,6 +72,37 @@ class StatementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($accountNumber, $this->statement->getAccountNumber());
     }
 
+    public function testParsedAccountNumber()
+    {
+        $accountNumber = '1231234567890/0100';
+        $this->statement->setAccountNumber($accountNumber);
+        $parsedAccountNumber = $this->statement->getParsedAccountNumber();
+        $this->assertEquals('123', $parsedAccountNumber['prefix']);
+        $this->assertEquals('1234567890', $parsedAccountNumber['number']);
+        $this->assertEquals('0100', $parsedAccountNumber['bankCode']);
+
+        $accountNumber = '123-1234567890/0100';
+        $this->statement->setAccountNumber($accountNumber);
+        $parsedAccountNumber = $this->statement->getParsedAccountNumber();
+        $this->assertEquals('123', $parsedAccountNumber['prefix']);
+        $this->assertEquals('1234567890', $parsedAccountNumber['number']);
+        $this->assertEquals('0100', $parsedAccountNumber['bankCode']);
+
+        $accountNumber = '123456789/0100';
+        $this->statement->setAccountNumber($accountNumber);
+        $parsedAccountNumber = $this->statement->getParsedAccountNumber();
+        $this->assertNull($parsedAccountNumber['prefix']);
+        $this->assertEquals('123456789', $parsedAccountNumber['number']);
+        $this->assertEquals('0100', $parsedAccountNumber['bankCode']);
+
+        $accountNumber = '1231234567890';
+        $this->statement->setAccountNumber($accountNumber);
+        $parsedAccountNumber = $this->statement->getParsedAccountNumber();
+        $this->assertEquals('123', $parsedAccountNumber['prefix']);
+        $this->assertEquals('1234567890', $parsedAccountNumber['number']);
+        $this->assertNull($parsedAccountNumber['bankCode']);
+    }
+
     public function testTransactions()
     {
         $transactionMock_1 = $this->getMock('JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction');

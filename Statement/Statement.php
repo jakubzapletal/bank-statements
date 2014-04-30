@@ -172,6 +172,42 @@ class Statement implements StatementInterface, \Countable, \Iterator
     }
 
     /**
+     * Split account number to parts
+     *
+     * @return array
+     */
+    public function getParsedAccountNumber()
+    {
+        $parsedAccountNumber = [
+            'prefix'   => null,
+            'number'   => null,
+            'bankCode' => null
+        ];
+
+        $accountNumber = $this->getAccountNumber();
+
+        $splitBankCode = explode('/', $accountNumber);
+        if (count($splitBankCode) === 2) {
+            $parsedAccountNumber['bankCode'] = $splitBankCode[1];
+        }
+
+        $splitNumber = explode('-', $splitBankCode[0]);
+        if (count($splitNumber) === 2) {
+            $parsedAccountNumber['prefix'] = $splitNumber[0];
+            $parsedAccountNumber['number'] = $splitNumber[1];
+        } else {
+            if (strlen($splitNumber[0]) <= 10) {
+                $parsedAccountNumber['number'] = $splitNumber[0];
+            } else {
+                $parsedAccountNumber['prefix'] = substr($splitNumber[0], 0, strlen($splitNumber[0]) - 10);
+                $parsedAccountNumber['number'] = substr($splitNumber[0], -10, 10);
+            }
+        }
+
+        return $parsedAccountNumber;
+    }
+
+    /**
      * @return \DateTime
      */
     public function getDateLastBalance()
