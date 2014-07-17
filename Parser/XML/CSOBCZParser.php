@@ -19,6 +19,7 @@ class CSOBCZParser extends XMLParser
     public function parseContent($content)
     {
         $content = iconv("WINDOWS-1250", "UTF-8//IGNORE", $content);
+        $content = str_replace('<?xml version="1.0" encoding="windows-1250"?>', '<?xml version="1.0" encoding="utf-8"?>', $content);
 
         return parent::parseContent($content);
     }
