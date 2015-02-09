@@ -2,7 +2,10 @@
 
 namespace JakubZapletal\Component\BankStatement\Tests\Parser;
 
-class XMLParserTest extends \PHPUnit_Framework_TestCase
+use JakubZapletal\Component\BankStatement\Tests\TestCase;
+
+
+class XMLParserTest extends TestCase
 {
     /**
      * @var string

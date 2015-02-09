@@ -2,9 +2,11 @@
 
 namespace JakubZapletal\Component\BankStatement\Tests\Statement\Transaction;
 
+use JakubZapletal\Component\BankStatement\Tests\TestCase;
 use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
 
-class TransactionTest extends \PHPUnit_Framework_TestCase
+
+class TransactionTest extends TestCase
 {
     /**
      * @var Transaction
