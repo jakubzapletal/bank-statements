@@ -2,9 +2,11 @@
 
 namespace JakubZapletal\Component\BankStatement\Tests\Statement\Transaction;
 
+use JakubZapletal\Component\BankStatement\Tests\TestCase;
 use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
 
-class TransactionTest extends \PHPUnit_Framework_TestCase
+
+class TransactionTest extends TestCase
 {
     /**
      * @var Transaction
@@ -29,7 +31,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
         $constantSymbol = '308';
 
         $this->transaction->setConstantSymbol($constantSymbol);
-        $this->assertEquals($constantSymbol, $this->transaction->getConstantSymbol());
+        $this->assertSame($constantSymbol, $this->transaction->getConstantSymbol());
     }
 
     public function testCredit()
@@ -82,18 +84,18 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
 
     public function testSpecificSymbol()
     {
-        $specificSymbol = 12345;
+        $specificSymbol = '12345';
 
         $this->transaction->setSpecificSymbol($specificSymbol);
-        $this->assertEquals($specificSymbol, $this->transaction->getSpecificSymbol());
+        $this->assertSame($specificSymbol, $this->transaction->getSpecificSymbol());
     }
 
     public function testVariableSymbol()
     {
-        $variableSymbol = 12345;
+        $variableSymbol = '12345';
 
         $this->transaction->setVariableSymbol($variableSymbol);
-        $this->assertEquals($variableSymbol, $this->transaction->getVariableSymbol());
+        $this->assertSame($variableSymbol, $this->transaction->getVariableSymbol());
     }
 }
  

@@ -84,7 +84,7 @@ class Transaction implements TransactionInterface
      */
     public function setConstantSymbol($constantSymbol)
     {
-        $this->constantSymbol = (int) $constantSymbol;
+        $this->constantSymbol = $constantSymbol;
 
         return $this;
     }
@@ -204,7 +204,7 @@ class Transaction implements TransactionInterface
      */
     public function setSpecificSymbol($specificSymbol)
     {
-        $this->specificSymbol = (int) $specificSymbol;
+        $this->specificSymbol = $specificSymbol;
 
         return $this;
     }
@@ -224,7 +224,7 @@ class Transaction implements TransactionInterface
      */
     public function setVariableSymbol($variableSymbol)
     {
-        $this->variableSymbol = (int) $variableSymbol;
+        $this->variableSymbol = $variableSymbol;
 
         return $this;
     }

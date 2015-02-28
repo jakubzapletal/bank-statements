@@ -2,9 +2,11 @@
 
 namespace JakubZapletal\Component\BankStatement\Tests\Parser;
 
+use JakubZapletal\Component\BankStatement\Tests\TestCase;
 use JakubZapletal\Component\BankStatement\Parser\ABOParser;
 
-class ABOParserTest extends \PHPUnit_Framework_TestCase
+
+class ABOParserTest extends TestCase
 {
     /**
      * @var string

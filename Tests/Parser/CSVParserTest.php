@@ -2,7 +2,10 @@
 
 namespace JakubZapletal\Component\BankStatement\Tests\Parser;
 
-class CSVParserTest extends \PHPUnit_Framework_TestCase
+use JakubZapletal\Component\BankStatement\Tests\TestCase;
+
+
+class CSVParserTest extends TestCase
 {
     /**
      * @var string

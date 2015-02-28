@@ -2,10 +2,12 @@
 
 namespace JakubZapletal\Component\BankStatement\Tests\Parser\XML;
 
+use JakubZapletal\Component\BankStatement\Tests\TestCase;
 use JakubZapletal\Component\BankStatement\Parser\XML\CSOBCZParser;
 use Symfony\Component\DomCrawler\Crawler;
 
-class CSOBCZParserTest extends \PHPUnit_Framework_TestCase
+
+class CSOBCZParserTest extends TestCase
 {
     /**
      * @var string
