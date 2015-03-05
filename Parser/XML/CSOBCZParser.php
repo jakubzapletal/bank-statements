@@ -40,13 +40,26 @@ class CSOBCZParser extends XMLParser
         if ($crawler !== null) {
             $this->parseStatementNode($crawler);
 
-            $crawler->filter('FINSTA05')->each(function (Crawler $node) {
-                $transaction = $this->parseTransactionNode($node);
-                $this->statement->addTransaction($transaction);
+            $parser = $this;
+
+            $crawler->filter('FINSTA05')->each(function (Crawler $node) use ($parser) {
+                $parser->parseAndAddTransaction($node);
             });
+
         }
 
         return $this->statement;
+    }
+
+    /**
+     * Used in Closure for purpose of PHP 5.3 compatibility
+     *
+     * @param Crawler $node
+     */
+    public function parseAndAddTransaction(Crawler $node)
+    {
+        $transaction = $this->parseTransactionNode($node);
+        $this->statement->addTransaction($transaction);
     }
 
     /**
@@ -224,7 +237,7 @@ class CSOBCZParser extends XMLParser
         $transaction->setSpecificSymbol($specificSymbol);
 
         # Note
-        $notes = [];
+        $notes = array();
         $notes[] = rtrim($crawler->filter('PART_ID1_1')->text());
         $notes[] = rtrim($crawler->filter('PART_ID1_2')->text());
         $notes[] = rtrim($crawler->filter('PART_ID2_1')->text());

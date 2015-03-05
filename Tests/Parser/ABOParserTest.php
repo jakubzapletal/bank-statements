@@ -15,7 +15,7 @@ class ABOParserTest extends \PHPUnit_Framework_TestCase
     {
         $fileObject = new \SplFileObject(tempnam(sys_get_temp_dir(), 'test_'), 'w+');
 
-        $parserMock = $this->getMock($this->parserClassName, ['parseFileObject']);
+        $parserMock = $this->getMock($this->parserClassName, array('parseFileObject'));
         $parserMock
             ->expects($this->once())
             ->method('parseFileObject')
@@ -42,7 +42,7 @@ class ABOParserTest extends \PHPUnit_Framework_TestCase
     {
         $content = 'test';
 
-        $parserMock = $this->getMock($this->parserClassName, ['parseFileObject']);
+        $parserMock = $this->getMock($this->parserClassName, array('parseFileObject'));
         $parserMock
             ->expects($this->once())
             ->method('parseFileObject')
@@ -87,7 +87,7 @@ class ABOParserTest extends \PHPUnit_Framework_TestCase
         $fileObject->fwrite(
             '0760000000000012345000000000025678900000000020020000000600001000000002100200000220000000023070114Tran 2              01101070114' . PHP_EOL
         );
-        $statement = $method->invokeArgs($parser, [$fileObject]);
+        $statement = $method->invokeArgs($parser, array($fileObject));
 
         $this->assertInstanceOf(
             '\JakubZapletal\Component\BankStatement\Statement\Statement',
@@ -135,7 +135,7 @@ class ABOParserTest extends \PHPUnit_Framework_TestCase
         $fileObject->fwrite(
             '0750000000000012345000000000025678900000000020020000000600004000000002100200000220000000023070114Tran 2              01101070114' . PHP_EOL
         );
-        $statement = $method->invokeArgs($parser, [$fileObject]);
+        $statement = $method->invokeArgs($parser, array($fileObject));
 
         # Statement
         $this->assertSame(-1000.00, $statement->getLastBalance());
@@ -163,7 +163,7 @@ class ABOParserTest extends \PHPUnit_Framework_TestCase
         $reflectionParser = new \ReflectionClass($this->parserClassName);
         $method = $reflectionParser->getMethod('parseFileObject');
         $method->setAccessible(true);
-        $method->invoke($parser, ['test']);
+        $method->invoke($parser, array('test'));
     }
 }
  

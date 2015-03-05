@@ -17,7 +17,7 @@ class CSOBCZParserTest extends \PHPUnit_Framework_TestCase
         $text = 'ěščřžýáíéúůĚŠČŘŽÝÁÍÉÚŮ';
         $content = '<tag>' . $text . '</tag>';
 
-        $parserMock = $this->getMock($this->parserClassName, ['parseCrawler']);
+        $parserMock = $this->getMock($this->parserClassName, array('parseCrawler'));
         $parserMock
             ->expects($this->once())
             ->method('parseCrawler')
@@ -89,7 +89,7 @@ class CSOBCZParserTest extends \PHPUnit_Framework_TestCase
         ';
         $crawler->addXmlContent($content);
 
-        $statement = $method->invokeArgs($parser, [$crawler]);
+        $statement = $method->invokeArgs($parser, array($crawler));
 
         $this->assertInstanceOf(
             '\JakubZapletal\Component\BankStatement\Statement\Statement',
@@ -176,7 +176,7 @@ class CSOBCZParserTest extends \PHPUnit_Framework_TestCase
         ';
         $crawler->addXmlContent($content);
 
-        $statement = $method->invokeArgs($parser, [$crawler]);
+        $statement = $method->invokeArgs($parser, array($crawler));
 
         # Statement
         $this->assertSame(-1000.00, $statement->getLastBalance());
@@ -205,7 +205,7 @@ class CSOBCZParserTest extends \PHPUnit_Framework_TestCase
         $method = $reflectionParser->getMethod('parseCrawler');
         $method->setAccessible(true);
 
-         $method->invokeArgs($parser, ['test']);
+         $method->invokeArgs($parser, array('test'));
     }
 }
  

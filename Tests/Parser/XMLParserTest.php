@@ -16,7 +16,7 @@ class XMLParserTest extends \PHPUnit_Framework_TestCase
         $fileObject = new \SplFileObject(tempnam(sys_get_temp_dir(), 'test_'), 'w+');
         $fileObject->fwrite($content);
 
-        $parserMock = $this->getMockForAbstractClass($this->parserClassName, [], '', true, true, true, ['parseContent']);
+        $parserMock = $this->getMockForAbstractClass($this->parserClassName, array(), '', true, true, true, array('parseContent'));
         $parserMock
             ->expects($this->once())
             ->method('parseContent')
@@ -51,7 +51,7 @@ class XMLParserTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(0))
         ;
 
-        $parserMock = $this->getMockForAbstractClass($this->parserClassName, [], '', true, true, true, ['getCrawlerClass']);
+        $parserMock = $this->getMockForAbstractClass($this->parserClassName, array(), '', true, true, true, array('getCrawlerClass'));
         $parserMock
             ->expects($this->once())
             ->method('getCrawlerClass')

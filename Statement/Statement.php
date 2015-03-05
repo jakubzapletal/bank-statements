@@ -49,7 +49,7 @@ class Statement implements StatementInterface, \Countable, \Iterator
     /**
      * @var TransactionInterface[]
      */
-    protected $transactions = [];
+    protected $transactions = array();
 
     /**
      * @return float
@@ -178,11 +178,11 @@ class Statement implements StatementInterface, \Countable, \Iterator
      */
     public function getParsedAccountNumber()
     {
-        $parsedAccountNumber = [
+        $parsedAccountNumber = array(
             'prefix'   => null,
             'number'   => null,
             'bankCode' => null
-        ];
+        );
 
         $accountNumber = $this->getAccountNumber();
 

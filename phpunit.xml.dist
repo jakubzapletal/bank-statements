@@ -8,6 +8,10 @@
     stopOnFailure="false"
     bootstrap="vendor/autoload.php"
 >
+    <php>
+        <ini name="date.timezone" value="Europe/Prague"/>
+    </php>
+
     <testsuites>
         <testsuite name="JakubZapletal_Component_BankStatement_TestSuite">
             <directory>./Tests/</directory>
