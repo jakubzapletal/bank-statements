@@ -2,9 +2,9 @@
 <html>
 
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Bank-statements : PHP library to parse bank account statements" />
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Bank-statements : PHP library to parse bank account statements">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
@@ -32,19 +32,136 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h1>
-<a name="bank-statements" class="anchor" href="#bank-statements"><span class="octicon octicon-link"></span></a>Bank Statements</h1>
+<a id="bank-statements" class="anchor" href="#bank-statements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bank Statements</h1>
 
 <p><a href="https://travis-ci.org/jakubzapletal/bank-statements"><img src="https://travis-ci.org/jakubzapletal/bank-statements.svg?branch=master" alt="Build Status"></a>
 <a href="https://coveralls.io/r/jakubzapletal/bank-statements?branch=master"><img src="https://coveralls.io/repos/jakubzapletal/bank-statements/badge.png?branch=master" alt="Coverage Status"></a></p>
 
-<p>PHP library to parse bank account statements</p>
+<p><a href="https://packagist.org/packages/jakubzapletal/bank-statements"><img src="https://poser.pugx.org/jakubzapletal/bank-statements/v/stable.png" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/jakubzapletal/bank-statements"><img src="https://poser.pugx.org/jakubzapletal/bank-statements/downloads.png" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/jakubzapletal/bank-statements"><img src="https://poser.pugx.org/jakubzapletal/bank-statements/v/unstable.png" alt="Latest Unstable Version"></a>
+<a href="https://packagist.org/packages/jakubzapletal/bank-statements"><img src="https://poser.pugx.org/jakubzapletal/bank-statements/license.png" alt="License"></a></p>
+
+<p>This is a PHP library to parse bank account statements. The purpose of this library is to simplify bank statements processing
+and usage in your application in more standardized way. The parser result is an instance of:
+<code>JakubZapletal\Component\BankStatement\Statement\StatementInterface</code> containing detail information
+about a statement and an array of <code>JakubZapletal\Component\BankStatement\Statement\Transaction\TransactionInterface</code> with further
+information about transactions.</p>
 
 <h3>
-<a name="supported-formats" class="anchor" href="#supported-formats"><span class="octicon octicon-link"></span></a>Supported formats</h3>
+<a id="supported-formatsbank-list" class="anchor" href="#supported-formatsbank-list" aria-hidden="true"><span class="octicon octicon-link"></span></a>Supported formats/bank list</h3>
 
 <ul>
-<li><a href="doc/abo.md">ABO</a></li>
+<li>ABO (<code>*.gpc</code>) [<a href="doc/abo.md">doc</a>]
+
+<ul>
+<li>Česká spořitelna (CZ): <code>JakubZapletal\Component\BankStatement\Parser\ABO\CeskaSporitelnaCZParser</code>
+</li>
+<li>ČSOB (CZ): <code>JakubZapletal\Component\BankStatement\Parser\ABOParser</code>
+</li>
+<li>Fio banka (CZ): <code>JakubZapletal\Component\BankStatement\Parser\ABOParser</code>
+</li>
+<li>GE Money Bank (CZ): <code>JakubZapletal\Component\BankStatement\Parser\ABOParser</code>
+</li>
+<li>Komerční banka (CZ), <em>alias KM format</em>: <code>JakubZapletal\Component\BankStatement\Parser\ABOParser</code>
+</li>
+<li>Raiffeisenbank (CZ): <code>JakubZapletal\Component\BankStatement\Parser\ABOParser</code>
+</li>
 </ul>
+</li>
+<li>XML
+
+<ul>
+<li>ČSOB (CZ) [<a href="doc/xml/csob_cz.md">doc</a>]: <code>JakubZapletal\Component\BankStatement\Parser\XML\CSOBCZParser</code>
+</li>
+</ul>
+</li>
+<li>CSV</li>
+</ul>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Note that Bank Statements is <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md">PSR-4</a> compliant:</p>
+
+<h3>
+<a id="composer" class="anchor" href="#composer" aria-hidden="true"><span class="octicon octicon-link"></span></a>Composer</h3>
+
+<p>If you don't have Composer <a href="http://getcomposer.org/doc/00-intro.md#installation">install</a> it:</p>
+
+<div class="highlight highlight-bash"><pre>$ curl -s https://getcomposer.org/installer <span class="pl-k">|</span> php</pre></div>
+
+<p>Add <code>jakubzapletal/bank-statements</code> to <code>composer.json</code>:</p>
+
+<div class="highlight highlight-bash"><pre>$ composer require <span class="pl-s1"><span class="pl-pds">"</span>jakubzapletal/bank-statements:1.0.*@dev<span class="pl-pds">"</span></span></pre></div>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Parsing of each format is provided by a class implementing:</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-s3">JakubZapletal\Component\BankStatement\Parser\</span><span class="pl-c1">ParserInterface</span></span></pre></div>
+
+<p>Thanks to the interface we can rely on two main public methods: <code>parseFile</code> and <code>parseContent</code>.</p>
+
+<ul>
+<li>
+<code>parseFile</code> expects as an argument a <strong>path to file</strong> and then processes the parsing</li>
+<li>
+<code>parseContent</code> expects as an argument a <strong>string of content</strong> and then processes the parsing</li>
+</ul>
+
+<p>Both methods return a class implementing:</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-s3">JakubZapletal\Component\BankStatement\Statement\</span><span class="pl-c1">StatementInterface</span></span></pre></div>
+
+<p>The statement class includes transaction items, which are classes implementing:</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-s3">JakubZapletal\Component\BankStatement\Statement\Transaction\</span><span class="pl-c1">TransactionInterface</span></span></pre></div>
+
+<p>This behaviour ensures the <strong>same approach to the parsing and results for all parsers</strong>.</p>
+
+<p>All abstract classes and standard classes are <strong>easily extendable</strong>, allowing implement parsing process of any data.</p>
+
+<p>The basic statement class:</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-s3">JakubZapletal\Component\BankStatement\Statement\</span><span class="pl-c1">Statement</span></span></pre></div>
+
+<p>implements <code>Countable</code> and <code>Iterator</code>, so we can call function <code>count()</code> on it's instances or traverse them using <code>foreach()</code>.
+Keep in mind that transactions of the statements are used. If you need more functionality in the statement class,
+I recommend extend this class.</p>
+
+<h3>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h3>
+
+<p>The parsing:</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-k">use</span> <span class="pl-s3">JakubZapletal\Component\BankStatement\Parser\ABOParser</span>;</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-vo">$parser</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-s3">ABOParser</span>();</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// by path to file</span></span>
+<span class="pl-s2"><span class="pl-vo">$path</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">'</span>/path/to/file<span class="pl-pds">'</span></span>;</span>
+<span class="pl-s2"><span class="pl-vo">$statement</span> <span class="pl-k">=</span> <span class="pl-vo">$parser</span><span class="pl-k">-&gt;</span>parseFile(<span class="pl-vo">$path</span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-c">// by content</span></span>
+<span class="pl-s2"><span class="pl-vo">$content</span> <span class="pl-k">=</span> <span class="pl-s1"><span class="pl-pds">'</span>string of data<span class="pl-pds">'</span></span>;</span>
+<span class="pl-s2"><span class="pl-vo">$statement</span> <span class="pl-k">=</span> <span class="pl-vo">$parser</span><span class="pl-k">-&gt;</span>parseContent(<span class="pl-vo">$content</span>);</span></pre></div>
+
+<p>Manipulation with the statement:</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-s3">echo</span> <span class="pl-s3">count</span>(<span class="pl-vo">$statement</span>); <span class="pl-c">// echo count of transaction items</span></span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-k">foreach</span> (<span class="pl-vo">$statement</span> <span class="pl-k">as</span> <span class="pl-vo">$transaction</span>) {</span>
+<span class="pl-s2">    <span class="pl-c">// do something with each transaction</span></span>
+<span class="pl-s2">}</span>
+<span class="pl-s2"></span>
+<span class="pl-s2"><span class="pl-s3">echo</span> <span class="pl-vo">$statement</span><span class="pl-k">-&gt;</span>getAccountNumber(); <span class="pl-c">// echo an account number of the statement</span></span></pre></div>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h2>
+
+<p>Contributions are welcome! Please see the <a href="contributing.md">Contribution Guidelines</a>.</p>
       </section>
     </div>
 
