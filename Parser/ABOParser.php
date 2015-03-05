@@ -15,12 +15,12 @@ use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
  */
 class ABOParser extends Parser
 {
-    const LINE_TYPE_STATEMENT   = 'statement';
+    const LINE_TYPE_STATEMENT = 'statement';
     const LINE_TYPE_TRANSACTION = 'transaction';
 
-    const POSTING_CODE_DEBIT           = 1;
-    const POSTING_CODE_CREDIT          = 2;
-    const POSTING_CODE_DEBIT_REVERSAL  = 4;
+    const POSTING_CODE_DEBIT = 1;
+    const POSTING_CODE_CREDIT = 2;
+    const POSTING_CODE_DEBIT_REVERSAL = 4;
     const POSTING_CODE_CREDIT_REVERSAL = 5;
 
     /**
@@ -124,54 +124,28 @@ class ABOParser extends Parser
     protected function parseStatementLine($line)
     {
         # Account number
-        $accountNumber = ltrim(substr($line, 3, 16), '0');
-        $this->statement->setAccountNumber($accountNumber);
+        $this->statement->setAccountNumber($this->parseAccountNumber($line));
 
         # Date last balance
-        $date = substr($line, 39, 6);
-        $dateLastBalance = \DateTime::createFromFormat('dmyHis', $date . '120000');
-        $this->statement->setDateLastBalance($dateLastBalance);
+        $this->statement->setDateLastBalance($this->parseDateLastBalance($line));
 
         # Last balance
-        $lastBalance = ltrim(substr($line, 45, 14), '0') / 100;
-        $lastBalanceSign = substr($line, 59, 1);
-        if ($lastBalanceSign === '-') {
-            $lastBalance *= -1;
-        }
-        $this->statement->setLastBalance($lastBalance);
+        $this->statement->setLastBalance($this->parseLastBalance($line));
 
         # Balance
-        $balance = ltrim(substr($line, 60, 14), '0') / 100;
-        $balanceSign = substr($line, 74, 1);
-        if ($balanceSign === '-') {
-            $balance *= -1;
-        }
-        $this->statement->setBalance($balance);
+        $this->statement->setBalance($this->parseBalance($line));
 
         # Debit turnover
-        $debitTurnover = ltrim(substr($line, 75, 14), '0') / 100;
-        $debitTurnoverSign = substr($line, 89, 1);
-        if ($debitTurnoverSign === '-') {
-            $debitTurnover *= -1;
-        }
-        $this->statement->setDebitTurnover($debitTurnover);
+        $this->statement->setDebitTurnover($this->parseDebitTurnover($line));
 
         # Credit turnover
-        $creditTurnover = ltrim(substr($line, 90, 14), '0') / 100;
-        $creditTurnoverSign = substr($line, 104, 1);
-        if ($creditTurnoverSign === '-') {
-            $creditTurnover *= -1;
-        }
-        $this->statement->setCreditTurnover($creditTurnover);
+        $this->statement->setCreditTurnover($this->parseCreditTurnover($line));
 
         # Serial number
-        $serialNumber = substr($line, 105, 3) * 1;
-        $this->statement->setSerialNumber($serialNumber);
+        $this->statement->setSerialNumber($this->parseSerialNumber($line));
 
         # Date created
-        $date = substr($line, 108, 6);
-        $dateCreated = \DateTime::createFromFormat('dmyHis', $date . '120000');
-        $this->statement->setDateCreated($dateCreated);
+        $this->statement->setDateCreated($this->parseDateCreated($line));
     }
 
     /**
@@ -204,53 +178,220 @@ class ABOParser extends Parser
         $transaction = $this->getTransactionClass();
 
         # Receipt ID
-        $receiptId = ltrim(substr($line, 35, 13), '0');
-        $transaction->setReceiptId($receiptId);
+        $transaction->setReceiptId($this->parseReceiptId($line));
 
         # Debit / Credit
-        $amount = ltrim(substr($line, 48, 12), '0') / 100;
-        $postingCode = substr($line, 60, 1);
-        switch ($postingCode) {
+        switch ($this->parsePostingCode($line)) {
             case self::POSTING_CODE_DEBIT:
-                $transaction->setDebit($amount);
+                $transaction->setDebit($this->parseAmount($line));
                 break;
             case self::POSTING_CODE_CREDIT:
-                $transaction->setCredit($amount);
+                $transaction->setCredit($this->parseAmount($line));
                 break;
             case self::POSTING_CODE_DEBIT_REVERSAL:
-                $transaction->setDebit($amount * (-1));
+                $transaction->setDebit($this->parseAmount($line) * (-1));
                 break;
             case self::POSTING_CODE_CREDIT_REVERSAL:
-                $transaction->setCredit($amount * (-1));
+                $transaction->setCredit($this->parseAmount($line) * (-1));
                 break;
         }
 
         # Variable symbol
-        $variableSymbol = ltrim(substr($line, 61, 10), '0');
-        $transaction->setVariableSymbol($variableSymbol);
+        $transaction->setVariableSymbol($this->parseVariableSymbol($line));
 
         # Constant symbol
-        $constantSymbol = ltrim(substr($line, 77, 4), '0');
-        $transaction->setConstantSymbol($constantSymbol);
+        $transaction->setConstantSymbol($this->parseConstantSymbol($line));
 
         # Counter account number
-        $counterAccountNumber = ltrim(substr($line, 19, 16), '0');
-        $codeOfBank = substr($line, 73, 4);
-        $transaction->setCounterAccountNumber($counterAccountNumber . '/' . $codeOfBank);
+        $transaction->setCounterAccountNumber($this->parseCounterAccountNumber($line));
 
         # Specific symbol
-        $specificSymbol = ltrim(substr($line, 81, 10), '0');
-        $transaction->setSpecificSymbol($specificSymbol);
+        $transaction->setSpecificSymbol($this->parseSpecificSymbol($line));
 
         # Note
-        $note = rtrim(substr($line, 97, 20));
-        $transaction->setNote($note);
+        $transaction->setNote($this->parseNote($line));
 
         # Date created
-        $date = substr($line, 122, 6);
-        $dateCreated = \DateTime::createFromFormat('dmyHis', $date . '120000');
-        $transaction->setDateCreated($dateCreated);
+        $transaction->setDateCreated($this->parseTransactionDateCreated($line));
 
         return $transaction;
+    }
+
+    /**
+     * @param $line
+     * @return string
+     */
+    protected function parseAccountNumber($line)
+    {
+        return ltrim(substr($line, 3, 16), '0');
+    }
+
+    /**
+     * @param $line
+     * @return \DateTime
+     */
+    protected function parseDateLastBalance($line)
+    {
+        $date = substr($line, 39, 6);
+        return \DateTime::createFromFormat('dmyHis', $date . '120000');
+    }
+
+    /**
+     * @param $line
+     * @return float|int
+     */
+    protected function parseLastBalance($line)
+    {
+        $lastBalance = ltrim(substr($line, 45, 14), '0') / 100;
+        $lastBalanceSign = substr($line, 59, 1);
+        if ($lastBalanceSign === '-') {
+            $lastBalance *= -1;
+        }
+        return $lastBalance;
+    }
+
+    /**
+     * @param $line
+     * @return float|int
+     */
+    protected function parseBalance($line)
+    {
+        $balance = ltrim(substr($line, 60, 14), '0') / 100;
+        $balanceSign = substr($line, 74, 1);
+        if ($balanceSign === '-') {
+            $balance *= -1;
+        }
+        return $balance;
+    }
+
+    /**
+     * @param $line
+     * @return float|int
+     */
+    protected function parseDebitTurnover($line)
+    {
+        $debitTurnover = ltrim(substr($line, 75, 14), '0') / 100;
+        $debitTurnoverSign = substr($line, 89, 1);
+        if ($debitTurnoverSign === '-') {
+            $debitTurnover *= -1;
+        }
+        return $debitTurnover;
+    }
+
+    /**
+     * @param $line
+     * @return float|int
+     */
+    protected function parseCreditTurnover($line)
+    {
+        $creditTurnover = ltrim(substr($line, 90, 14), '0') / 100;
+        $creditTurnoverSign = substr($line, 104, 1);
+        if ($creditTurnoverSign === '-') {
+            $creditTurnover *= -1;
+        }
+        return $creditTurnover;
+    }
+
+    /**
+     * @param $line
+     * @return string
+     */
+    protected function parseSerialNumber($line)
+    {
+        return substr($line, 105, 3) * 1;
+    }
+
+    /**
+     * @param $line
+     * @return \DateTime
+     */
+    protected function parseDateCreated($line)
+    {
+        $date = substr($line, 108, 6);
+        return \DateTime::createFromFormat('dmyHis', $date . '120000');
+    }
+
+    /**
+     * @param $line
+     * @return string
+     */
+    protected function parseReceiptId($line)
+    {
+        return ltrim(substr($line, 35, 13), '0');
+    }
+
+    /**
+     * @param $line
+     * @return float
+     */
+    protected function parseAmount($line)
+    {
+        return ltrim(substr($line, 48, 12), '0') / 100;
+    }
+
+    /**
+     * @param $line
+     * @return int
+     */
+    protected function parsePostingCode($line)
+    {
+        return intval(substr($line, 60, 1));
+    }
+
+    /**
+     * @param $line
+     * @return string
+     */
+    protected function parseVariableSymbol($line)
+    {
+        return ltrim(substr($line, 61, 10), '0');
+    }
+
+    /**
+     * @param $line
+     * @return string
+     */
+    protected function parseConstantSymbol($line)
+    {
+        return ltrim(substr($line, 77, 4), '0');
+    }
+
+    /**
+     * @param $line
+     * @return string
+     */
+    protected function parseCounterAccountNumber($line)
+    {
+        $counterAccountNumber = ltrim(substr($line, 19, 16), '0');
+        $codeOfBank = substr($line, 73, 4);
+        return $counterAccountNumber . '/' . $codeOfBank;
+    }
+
+    /**
+     * @param $line
+     * @return string
+     */
+    protected function parseSpecificSymbol($line)
+    {
+        return ltrim(substr($line, 81, 10), '0');
+    }
+
+    /**
+     * @param $line
+     * @return string
+     */
+    protected function parseNote($line)
+    {
+        return rtrim(substr($line, 97, 20));
+    }
+
+    /**
+     * @param $line
+     * @return \DateTime
+     */
+    protected function parseTransactionDateCreated($line)
+    {
+        $date = substr($line, 122, 6);
+        return \DateTime::createFromFormat('dmyHis', $date . '120000');
     }
 }
