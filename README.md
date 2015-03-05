@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/jakubzapletal/bank-statements.svg?branch=master)](https://travis-ci.org/jakubzapletal/bank-statements)
 [![Coverage Status](https://coveralls.io/repos/jakubzapletal/bank-statements/badge.png?branch=master)](https://coveralls.io/r/jakubzapletal/bank-statements?branch=master)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/7feae3d9-f29f-41c2-9843-218f2eac5db9/mini.png)](https://insight.sensiolabs.com/projects/7feae3d9-f29f-41c2-9843-218f2eac5db9)
 
 [![Latest Stable Version](https://poser.pugx.org/jakubzapletal/bank-statements/v/stable.png)](https://packagist.org/packages/jakubzapletal/bank-statements)
 [![Total Downloads](https://poser.pugx.org/jakubzapletal/bank-statements/downloads.png)](https://packagist.org/packages/jakubzapletal/bank-statements)
