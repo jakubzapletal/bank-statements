@@ -57,4 +57,4 @@ abstract class XMLParser extends Parser
     {
         return new Crawler();
     }
-} 
+}

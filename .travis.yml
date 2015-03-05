@@ -11,4 +11,4 @@ script:
   - php bin/phpunit
 
 after_script:
- - php bin/coveralls -v
+  - php bin/coveralls -v

@@ -43,4 +43,4 @@ abstract class CSVParser extends Parser
      * @return Statement
      */
     protected abstract function parseFileObject(\SplFileObject $fileObject);
-} 
+}

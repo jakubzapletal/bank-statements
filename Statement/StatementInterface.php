@@ -100,4 +100,4 @@ interface StatementInterface
      * @return $this
      */
     public function removeTransaction(TransactionInterface $transaction);
-} 
+}

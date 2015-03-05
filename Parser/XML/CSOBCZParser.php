@@ -256,4 +256,4 @@ class CSOBCZParser extends XMLParser
 
         return $transaction;
     }
-} 
+}

@@ -55,4 +55,4 @@ abstract class Parser implements ParserInterface
     {
         return new Transaction();
     }
-} 
+}

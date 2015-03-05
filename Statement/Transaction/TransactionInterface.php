@@ -111,4 +111,4 @@ interface TransactionInterface
      * @return $this
      */
     public function setVariableSymbol($variableSymbol);
-} 
+}
