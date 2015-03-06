@@ -21,8 +21,7 @@ information about transactions.
 * ABO (`*.gpc`) [[doc](doc/abo.md)]
  * TatraBanka (SK): `JakubZapletal\Component\BankStatement\Parser\ABO\TatraBankaSKParser`
  * UniCredit Bank (SK): `JakubZapletal\Component\BankStatement\Parser\ABO\TatraBankaSKParser`
- * Česká spořitelna (CZ): `JakubZapletal\Component\BankStatement\Parser\ABO\CeskaSporitelnaCZParser`
- * Česká spořitelna (CZ): `JakubZapletal\Component\BankStatement\Parser\ABO\CeskaSporitelnaCZParser`
+  * Česká spořitelna (CZ): `JakubZapletal\Component\BankStatement\Parser\ABO\CeskaSporitelnaCZParser`
  * ČSOB (CZ): `JakubZapletal\Component\BankStatement\Parser\ABOParser`
  * Fio banka (CZ): `JakubZapletal\Component\BankStatement\Parser\ABOParser`
  * GE Money Bank (CZ): `JakubZapletal\Component\BankStatement\Parser\ABOParser`
