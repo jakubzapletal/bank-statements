@@ -2,19 +2,28 @@
 
 namespace JakubZapletal\Component\BankStatement\Statement\Transaction;
 
+use JakubZapletal\Component\BankStatement\Statement\BankAccount;
+
 interface TransactionInterface
 {
     /**
+     * @deprecated
+     *
      * @return string
      */
     public function getCounterAccountNumber();
 
     /**
-     * @param $counterAccountNumber
+     * @return BankAccount
+     */
+    public function getCounterBankAccount();
+
+    /**
+     * @param BankAccount $counterBankAccount
      *
      * @return $this
      */
-    public function setCounterAccountNumber($counterAccountNumber);
+    public function setCounterBankAccount(BankAccount $counterBankAccount);
 
     /**
      * @return int

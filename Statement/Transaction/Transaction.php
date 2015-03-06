@@ -2,12 +2,14 @@
 
 namespace JakubZapletal\Component\BankStatement\Statement\Transaction;
 
+use JakubZapletal\Component\BankStatement\Statement\BankAccount;
+
 class Transaction implements TransactionInterface
 {
     /**
-     * @var string
+     * @var BankAccount
      */
-    protected $counterAccountNumber;
+    protected $counterBankAccount;
 
     /**
      * @var string
@@ -50,21 +52,35 @@ class Transaction implements TransactionInterface
     protected $dateCreated;
 
     /**
+     * Only for backward compatibility
+     * @deprecated
+     *
      * @return string
      */
     public function getCounterAccountNumber()
     {
-        return $this->counterAccountNumber;
+        if ($this->counterBankAccount === null) {
+            return null;
+        }
+        return $this->counterBankAccount->getFormatted();
     }
 
     /**
-     * @param $counterAccountNumber
+     * @return BankAccount
+     */
+    public function getCounterBankAccount()
+    {
+        return $this->counterBankAccount;
+    }
+
+    /**
+     * @param BankAccount $counterBankAccount
      *
      * @return $this
      */
-    public function setCounterAccountNumber($counterAccountNumber)
+    public function setCounterBankAccount(BankAccount $counterBankAccount)
     {
-        $this->counterAccountNumber = $counterAccountNumber;
+        $this->counterBankAccount = $counterBankAccount;
 
         return $this;
     }
@@ -84,7 +100,7 @@ class Transaction implements TransactionInterface
      */
     public function setConstantSymbol($constantSymbol)
     {
-        $this->constantSymbol = (int) $constantSymbol;
+        $this->constantSymbol = (int)$constantSymbol;
 
         return $this;
     }
@@ -104,7 +120,7 @@ class Transaction implements TransactionInterface
      */
     public function setCredit($credit)
     {
-        $this->credit = (float) $credit;
+        $this->credit = (float)$credit;
 
         return $this;
     }
@@ -144,7 +160,7 @@ class Transaction implements TransactionInterface
      */
     public function setDebit($debit)
     {
-        $this->debit = (float) $debit;
+        $this->debit = (float)$debit;
 
         return $this;
     }
@@ -204,7 +220,7 @@ class Transaction implements TransactionInterface
      */
     public function setSpecificSymbol($specificSymbol)
     {
-        $this->specificSymbol = (int) $specificSymbol;
+        $this->specificSymbol = (int)$specificSymbol;
 
         return $this;
     }
@@ -224,7 +240,7 @@ class Transaction implements TransactionInterface
      */
     public function setVariableSymbol($variableSymbol)
     {
-        $this->variableSymbol = (int) $variableSymbol;
+        $this->variableSymbol = (int)$variableSymbol;
 
         return $this;
     }
