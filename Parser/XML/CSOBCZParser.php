@@ -3,14 +3,15 @@
 namespace JakubZapletal\Component\BankStatement\Parser\XML;
 
 use JakubZapletal\Component\BankStatement\Parser\XMLParser;
+use JakubZapletal\Component\BankStatement\Statement\BankAccount;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\CssSelector\CssSelector;
 
 class CSOBCZParser extends XMLParser
 {
-    const POSTING_CODE_DEBIT           = 'D';
-    const POSTING_CODE_CREDIT          = 'C';
-    const POSTING_CODE_DEBIT_REVERSAL  = 'DR';
+    const POSTING_CODE_DEBIT = 'D';
+    const POSTING_CODE_CREDIT = 'C';
+    const POSTING_CODE_DEBIT_REVERSAL = 'DR';
     const POSTING_CODE_CREDIT_REVERSAL = 'CR';
 
     /**
@@ -92,8 +93,9 @@ class CSOBCZParser extends XMLParser
     protected function parseStatementNode(Crawler $crawler)
     {
         # Account number
-        $accountNumber = $crawler->filter('S25_CISLO_UCTU')->text();
-        $this->statement->setAccountNumber($accountNumber);
+        $bankAccount = new BankAccount();
+        $bankAccount->setFormatted($crawler->filter('S25_CISLO_UCTU')->text());
+        $this->statement->setBankAccount($bankAccount);
 
         # Date last balance
         $date = $crawler->filter('S60_DATUM')->text();
@@ -230,7 +232,9 @@ class CSOBCZParser extends XMLParser
         # Counter account number
         $counterAccountNumber = $crawler->filter('PART_ACCNO')->text();
         $codeOfBank = $crawler->filter('PART_BANK_ID')->text();
-        $transaction->setCounterAccountNumber($counterAccountNumber . '/' . $codeOfBank);
+        $bankAccount = new BankAccount();
+        $bankAccount->setFormatted($counterAccountNumber . '/' . $codeOfBank);
+        $transaction->setCounterBankAccount($bankAccount);
 
         # Specific symbol
         $specificSymbol = $crawler->filter('S86_SPECSYMOUR')->text();

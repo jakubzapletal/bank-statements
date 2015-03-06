@@ -2,6 +2,7 @@
 
 namespace JakubZapletal\Component\BankStatement\Parser;
 
+use JakubZapletal\Component\BankStatement\Statement\BankAccount;
 use JakubZapletal\Component\BankStatement\Statement\Statement;
 use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
 
@@ -124,7 +125,7 @@ class ABOParser extends Parser
     protected function parseStatementLine($line)
     {
         # Account number
-        $this->statement->setAccountNumber($this->parseAccountNumber($line));
+        $this->statement->setBankAccount($this->parseBankAccount($line));
 
         # Date last balance
         $this->statement->setDateLastBalance($this->parseDateLastBalance($line));
@@ -203,7 +204,7 @@ class ABOParser extends Parser
         $transaction->setConstantSymbol($this->parseConstantSymbol($line));
 
         # Counter account number
-        $transaction->setCounterAccountNumber($this->parseCounterAccountNumber($line));
+        $transaction->setCounterBankAccount($this->parseCounterBankAccount($line));
 
         # Specific symbol
         $transaction->setSpecificSymbol($this->parseSpecificSymbol($line));
@@ -219,11 +220,13 @@ class ABOParser extends Parser
 
     /**
      * @param $line
-     * @return string
+     * @return BankAccount
      */
-    protected function parseAccountNumber($line)
+    protected function parseBankAccount($line)
     {
-        return ltrim(substr($line, 3, 16), '0');
+        $prefix = ltrim(substr($line, 3, 6), '0');
+        $number = ltrim(substr($line, 9, 10), '0');
+        return new BankAccount($prefix, $number);
     }
 
     /**
@@ -358,13 +361,14 @@ class ABOParser extends Parser
 
     /**
      * @param $line
-     * @return string
+     * @return BankAccount
      */
-    protected function parseCounterAccountNumber($line)
+    protected function parseCounterBankAccount($line)
     {
-        $counterAccountNumber = ltrim(substr($line, 19, 16), '0');
-        $codeOfBank = substr($line, 73, 4);
-        return $counterAccountNumber . '/' . $codeOfBank;
+        $prefix = ltrim(substr($line, 19, 6), '0');
+        $number = ltrim(substr($line, 25, 10), '0');
+        $bankCode = ltrim(substr($line, 73, 4), '0');
+        return new BankAccount($prefix, $number, $bankCode);
     }
 
     /**

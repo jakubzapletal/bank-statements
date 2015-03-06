@@ -71,16 +71,23 @@ interface StatementInterface
     public function setDebitTurnover($debitTurnover);
 
     /**
-     * @return string
+     * @return BankAccount
      */
-    public function getAccountNumber();
+    public function getBankAccount();
 
     /**
-     * @param $accountNumber
+     * @param BankAccount $bankAccount
      *
      * @return $this
      */
-    public function setAccountNumber($accountNumber);
+    public function setBankAccount(BankAccount $bankAccount);
+
+    /**
+     * @deprecated
+     *
+     * @return string
+     */
+    public function getAccountNumber();
 
     /**
      * @return TransactionInterface[]
