@@ -1,6 +1,8 @@
 <?php
 
-namespace JakubZapletal\Component\BankStatement\Tests\Parser;
+namespace JakubZapletal\Component\BankStatement\Tests\Parser\ABO;
+
+use JakubZapletal\Component\BankStatement\Tests\Parser\ABOParserTest;
 
 class CeskaSporitelnaCZParserTest extends ABOParserTest
 {
