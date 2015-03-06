@@ -63,4 +63,3 @@ class CSVParserTest extends \PHPUnit_Framework_TestCase
         $parserMock->parseContent(123);
     }
 }
- 

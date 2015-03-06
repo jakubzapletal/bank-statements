@@ -18,7 +18,7 @@ abstract class Parser implements ParserInterface
      * @return Statement
      * @throw \Exception
      */
-    public abstract function parseFile($filePath);
+    abstract public function parseFile($filePath);
 
     /**
      * @param string $content
@@ -26,7 +26,7 @@ abstract class Parser implements ParserInterface
      * @return Statement
      * @throw \Exception
      */
-    public abstract function parseContent($content);
+    abstract public function parseContent($content);
 
     /**
      * @return Statement

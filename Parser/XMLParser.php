@@ -48,7 +48,7 @@ abstract class XMLParser extends Parser
      *
      * @return Statement
      */
-    protected abstract function parseCrawler(Crawler $crawler);
+    abstract protected function parseCrawler(Crawler $crawler);
 
     /**
      * @return Crawler

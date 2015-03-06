@@ -208,4 +208,3 @@ class CSOBCZParserTest extends \PHPUnit_Framework_TestCase
          $method->invokeArgs($parser, array('test'));
     }
 }
- 

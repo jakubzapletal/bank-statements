@@ -96,4 +96,3 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($variableSymbol, $this->transaction->getVariableSymbol());
     }
 }
- 
