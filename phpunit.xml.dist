@@ -6,11 +6,8 @@
     convertNoticesToExceptions="true"
     convertWarningsToExceptions="true"
     stopOnFailure="false"
-    bootstrap="vendor/autoload.php"
+    bootstrap="Tests/bootstrap.php"
 >
-    <php>
-        <ini name="date.timezone" value="Europe/Prague"/>
-    </php>
 
     <testsuites>
         <testsuite name="JakubZapletal_Component_BankStatement_TestSuite">
