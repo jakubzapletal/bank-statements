@@ -368,7 +368,7 @@ class ABOParser extends Parser
     {
         $prefix = ltrim(substr($line, 19, 6), '0');
         $number = ltrim(substr($line, 25, 10), '0');
-        $bankCode = ltrim(substr($line, 73, 4), '0');
+        $bankCode = substr($line, 73, 4);
         return new BankAccount($prefix, $number, $bankCode);
     }
 

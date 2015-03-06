@@ -37,7 +37,7 @@ class BankAccount
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getPrefix()
     {
@@ -57,7 +57,7 @@ class BankAccount
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getNumber()
     {
@@ -77,7 +77,7 @@ class BankAccount
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getBankCode()
     {
@@ -92,8 +92,8 @@ class BankAccount
     public function setBankCode($bankCode)
     {
         $this->bankCode = $bankCode;
-        return
-            $this;
+
+        return $this;
     }
 
     /**
