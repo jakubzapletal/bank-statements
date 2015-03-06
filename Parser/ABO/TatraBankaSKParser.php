@@ -15,7 +15,7 @@ class TatraBankaSKParser extends ABOParser
     {
         $prefix = ltrim(substr($line, 13, 6), '0');
         $number = ltrim($this->decodeAccountNumber(substr($line, 3, 10)), '0');
-        return new BankAccount($prefix, $number, '1100');
+        return new BankAccount($prefix, $number);
     }
 
     /**
