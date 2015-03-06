@@ -120,7 +120,7 @@ class Transaction implements TransactionInterface
      */
     public function setCredit($credit)
     {
-        $this->credit = (float) $credit;
+        $this->credit = (float)$credit;
 
         return $this;
     }
@@ -160,7 +160,7 @@ class Transaction implements TransactionInterface
      */
     public function setDebit($debit)
     {
-        $this->debit = (float) $debit;
+        $this->debit = (float)$debit;
 
         return $this;
     }

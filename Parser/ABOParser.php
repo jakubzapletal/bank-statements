@@ -19,10 +19,10 @@ class ABOParser extends Parser
     const LINE_TYPE_STATEMENT   = 'statement';
     const LINE_TYPE_TRANSACTION = 'transaction';
 
-    const POSTING_CODE_DEBIT            = 1;
-    const POSTING_CODE_CREDIT           = 2;
-    const POSTING_CODE_DEBIT_REVERSAL   = 4;
-    const POSTING_CODE_CREDIT_REVERSAL  = 5;
+    const POSTING_CODE_DEBIT           = 1;
+    const POSTING_CODE_CREDIT          = 2;
+    const POSTING_CODE_DEBIT_REVERSAL  = 4;
+    const POSTING_CODE_CREDIT_REVERSAL = 5;
 
     /**
      * @param string $filePath
