@@ -139,5 +139,4 @@ class BankAccount
     {
         return (empty($this->prefix) && empty($this->number) && empty($this->bankCode));
     }
-
 }
