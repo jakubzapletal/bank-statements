@@ -9,6 +9,7 @@ before_script:
 
 script:
   - php bin/phpunit
+  - php bin/phpcs --colors --standard=PSR2 Parser/ Statement/ Tests/
 
 after_script:
   - php bin/coveralls -v
