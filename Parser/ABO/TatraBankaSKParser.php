@@ -11,7 +11,7 @@ class TatraBankaSKParser extends ABOParser
      * @param $line
      * @return BankAccount
      */
-    protected function parseAccountNumber($line)
+    protected function parseBankAccount($line)
     {
         $prefix = ltrim(substr($line, 13, 6), '0');
         $number = ltrim($this->decodeAccountNumber(substr($line, 3, 10)), '0');
@@ -22,7 +22,7 @@ class TatraBankaSKParser extends ABOParser
      * @param $line
      * @return BankAccount
      */
-    protected function parseCounterAccountNumber($line)
+    protected function parseCounterBankAccount($line)
     {
         $prefix = ltrim(substr($line, 29, 6), '0');
         $number = ltrim($this->decodeAccountNumber(substr($line, 19, 10)), '0');
