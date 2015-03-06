@@ -182,18 +182,19 @@ class ABOParser extends Parser
         $transaction->setReceiptId($this->parseReceiptId($line));
 
         # Debit / Credit
+        $amount = $this->parseAmount($line);
         switch ($this->parsePostingCode($line)) {
             case self::POSTING_CODE_DEBIT:
-                $transaction->setDebit($this->parseAmount($line));
+                $transaction->setDebit($amount);
                 break;
             case self::POSTING_CODE_CREDIT:
-                $transaction->setCredit($this->parseAmount($line));
+                $transaction->setCredit($amount);
                 break;
             case self::POSTING_CODE_DEBIT_REVERSAL:
-                $transaction->setDebit($this->parseAmount($line) * (-1));
+                $transaction->setDebit($amount * (-1));
                 break;
             case self::POSTING_CODE_CREDIT_REVERSAL:
-                $transaction->setCredit($this->parseAmount($line) * (-1));
+                $transaction->setCredit($amount * (-1));
                 break;
         }
 
