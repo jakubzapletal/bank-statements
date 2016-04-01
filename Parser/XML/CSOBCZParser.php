@@ -49,7 +49,6 @@ class CSOBCZParser extends XMLParser
             $crawler->filter('FINSTA05')->each(function (Crawler $node) use ($parser) {
                 $parser->parseAndAddTransaction($node);
             });
-
         }
 
         return $this->statement;
