@@ -13,7 +13,7 @@
     "require-dev": {
         "phpunit/phpunit": "~4.0",
         "satooshi/php-coveralls": "^1.0.0",
-        "squizlabs/php_codesniffer": "~2.0"
+        "squizlabs/php_codesniffer": "~2.2"
     },
     "config": {
         "bin-dir": "bin"
