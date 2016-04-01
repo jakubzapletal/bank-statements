@@ -15,7 +15,6 @@
         "satooshi/php-coveralls": "^1.0.0",
         "squizlabs/php_codesniffer": "~2.0"
     },
-    "minimum-stability": "dev",
     "config": {
         "bin-dir": "bin"
     },
