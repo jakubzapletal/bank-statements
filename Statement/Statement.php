@@ -267,6 +267,7 @@ class Statement implements StatementInterface, \Countable, \Iterator
         foreach ($this->transactions as $addedTransaction) {
             if ($transaction === $addedTransaction) {
                 $added = true;
+                break;
             }
         }
 
@@ -287,6 +288,7 @@ class Statement implements StatementInterface, \Countable, \Iterator
         foreach ($this->transactions as $key => $addedTransaction) {
             if ($transaction === $addedTransaction) {
                 unset($this->transactions[$key]);
+                break;
             }
         }
 
