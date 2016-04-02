@@ -48,11 +48,14 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($date, $this->transaction->getDateCreated());
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testDateCreatedException()
     {
+        if (!class_exists('\TypeError')) {
+            $this->setExpectedException('\Exception');
+        } else {
+            $this->setExpectedException('\TypeError');
+        }
+
         $this->transaction->setDateCreated('2014-05-28');
     }
 

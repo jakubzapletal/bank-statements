@@ -40,11 +40,14 @@ class StatementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($date, $this->statement->getDateCreated());
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testDateCreatedException()
     {
+        if (!class_exists('\TypeError')) {
+            $this->setExpectedException('\Exception');
+        } else {
+            $this->setExpectedException('\TypeError');
+        }
+
         $this->statement->setDateCreated('2014-05-28');
     }
 
@@ -142,19 +145,19 @@ class StatementTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $this->statement->getTransactions());
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testAddTransactionException()
     {
         $stdClassMock = $this->getMock('\stdClass');
 
+        if (!class_exists('\TypeError')) {
+            $this->setExpectedException('\Exception');
+        } else {
+            $this->setExpectedException('\TypeError');
+        }
+
         $this->statement->addTransaction($stdClassMock);
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testRemoveTransactionException()
     {
         $transactionMock = $this->getMock('JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction');
@@ -162,6 +165,13 @@ class StatementTest extends \PHPUnit_Framework_TestCase
         $this->statement->addTransaction($transactionMock);
 
         $stdClassMock = $this->getMock('\stdClass');
+
+        if (!class_exists('\TypeError')) {
+            $this->setExpectedException('\Exception');
+        } else {
+            $this->setExpectedException('\TypeError');
+        }
+
         $this->statement->removeTransaction($stdClassMock);
     }
 
@@ -181,11 +191,14 @@ class StatementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($date, $this->statement->getDateLastBalance());
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testDateLastBalanceException()
     {
+        if (!class_exists('\TypeError')) {
+            $this->setExpectedException('\Exception');
+        } else {
+            $this->setExpectedException('\TypeError');
+        }
+
         $this->statement->setDateLastBalance('2014-05-28');
     }
 }
