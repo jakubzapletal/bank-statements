@@ -193,18 +193,4 @@ class CSOBCZParserTest extends \PHPUnit_Framework_TestCase
         $transaction = $statement->next();
         $this->assertSame(-600.00, $transaction->getDebit());
     }
-
-    /**
-     * @expectedException \Exception
-     */
-    public function testParseCrawlerExcpetion()
-    {
-        $parser = new CSOBCZParser();
-
-        $reflectionParser = new \ReflectionClass($this->parserClassName);
-        $method = $reflectionParser->getMethod('parseCrawler');
-        $method->setAccessible(true);
-
-         $method->invokeArgs($parser, array('test'));
-    }
 }

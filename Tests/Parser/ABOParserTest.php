@@ -159,17 +159,4 @@ class ABOParserTest extends \PHPUnit_Framework_TestCase
         $transaction = $statement->next();
         $this->assertSame(-600.00, $transaction->getDebit());
     }
-
-    /**
-     * @expectedException \Exception
-     */
-    public function testParseFileObjectException()
-    {
-        $parser = new ABOParser();
-
-        $reflectionParser = new \ReflectionClass($this->parserClassName);
-        $method = $reflectionParser->getMethod('parseFileObject');
-        $method->setAccessible(true);
-        $method->invoke($parser, array('test'));
-    }
 }
