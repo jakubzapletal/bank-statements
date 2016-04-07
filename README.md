@@ -19,7 +19,9 @@ information about transactions.
 ### Supported formats/bank list
 
 * ABO (`*.gpc`) [[doc](doc/abo.md)]
- * Česká spořitelna (CZ): `JakubZapletal\Component\BankStatement\Parser\ABO\CeskaSporitelnaCZParser`
+ * TatraBanka (SK): `JakubZapletal\Component\BankStatement\Parser\ABO\TatraBankaSKParser`
+ * UniCredit Bank (SK): `JakubZapletal\Component\BankStatement\Parser\ABO\TatraBankaSKParser`
+  * Česká spořitelna (CZ): `JakubZapletal\Component\BankStatement\Parser\ABO\CeskaSporitelnaCZParser`
  * ČSOB (CZ): `JakubZapletal\Component\BankStatement\Parser\ABOParser`
  * Fio banka (CZ): `JakubZapletal\Component\BankStatement\Parser\ABOParser`
  * GE Money Bank (CZ): `JakubZapletal\Component\BankStatement\Parser\ABOParser`

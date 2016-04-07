@@ -2,6 +2,7 @@
 
 namespace JakubZapletal\Component\BankStatement\Tests\Statement;
 
+use JakubZapletal\Component\BankStatement\Statement\BankAccount;
 use JakubZapletal\Component\BankStatement\Statement\Statement;
 
 class StatementTest extends \PHPUnit_Framework_TestCase
@@ -70,36 +71,45 @@ class StatementTest extends \PHPUnit_Framework_TestCase
     public function testAccountNumber()
     {
         $accountNumber = '123456789';
-
-        $this->statement->setAccountNumber($accountNumber);
+        $bankAccount = new BankAccount();
+        $bankAccount->setFormatted($accountNumber);
+        $this->statement->setBankAccount($bankAccount);
         $this->assertEquals($accountNumber, $this->statement->getAccountNumber());
     }
 
     public function testParsedAccountNumber()
     {
         $accountNumber = '1231234567890/0100';
-        $this->statement->setAccountNumber($accountNumber);
+        $bankAccount = new BankAccount();
+        $bankAccount->setFormatted($accountNumber);
+        $this->statement->setBankAccount($bankAccount);
         $parsedAccountNumber = $this->statement->getParsedAccountNumber();
         $this->assertEquals('123', $parsedAccountNumber['prefix']);
         $this->assertEquals('1234567890', $parsedAccountNumber['number']);
         $this->assertEquals('0100', $parsedAccountNumber['bankCode']);
 
         $accountNumber = '123-1234567890/0100';
-        $this->statement->setAccountNumber($accountNumber);
+        $bankAccount = new BankAccount();
+        $bankAccount->setFormatted($accountNumber);
+        $this->statement->setBankAccount($bankAccount);
         $parsedAccountNumber = $this->statement->getParsedAccountNumber();
         $this->assertEquals('123', $parsedAccountNumber['prefix']);
         $this->assertEquals('1234567890', $parsedAccountNumber['number']);
         $this->assertEquals('0100', $parsedAccountNumber['bankCode']);
 
         $accountNumber = '123456789/0100';
-        $this->statement->setAccountNumber($accountNumber);
+        $bankAccount = new BankAccount();
+        $bankAccount->setFormatted($accountNumber);
+        $this->statement->setBankAccount($bankAccount);
         $parsedAccountNumber = $this->statement->getParsedAccountNumber();
         $this->assertNull($parsedAccountNumber['prefix']);
         $this->assertEquals('123456789', $parsedAccountNumber['number']);
         $this->assertEquals('0100', $parsedAccountNumber['bankCode']);
 
         $accountNumber = '1231234567890';
-        $this->statement->setAccountNumber($accountNumber);
+        $bankAccount = new BankAccount();
+        $bankAccount->setFormatted($accountNumber);
+        $this->statement->setBankAccount($bankAccount);
         $parsedAccountNumber = $this->statement->getParsedAccountNumber();
         $this->assertEquals('123', $parsedAccountNumber['prefix']);
         $this->assertEquals('1234567890', $parsedAccountNumber['number']);
@@ -112,21 +122,18 @@ class StatementTest extends \PHPUnit_Framework_TestCase
         $transactionMock_1
             ->expects($this->any())
             ->method('getReceiptId')
-            ->will($this->returnValue(11))
-        ;
+            ->will($this->returnValue(11));
 
         $transactionMock_2 = $this->getMock('JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction');
         $transactionMock_2
             ->expects($this->any())
             ->method('getReceiptId')
-            ->will($this->returnValue(22))
-        ;
+            ->will($this->returnValue(22));
 
         $this->statement
             ->addTransaction($transactionMock_1)
             ->addTransaction($transactionMock_2)
-            ->addTransaction($transactionMock_2)
-        ;
+            ->addTransaction($transactionMock_2);
 
         $this->assertCount(2, $this->statement->getTransactions());
 

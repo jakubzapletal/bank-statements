@@ -2,6 +2,7 @@
 
 namespace JakubZapletal\Component\BankStatement\Tests\Statement\Transaction;
 
+use JakubZapletal\Component\BankStatement\Statement\BankAccount;
 use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
 
 class TransactionTest extends \PHPUnit_Framework_TestCase
@@ -19,8 +20,9 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
     public function testCounterAccountNumber()
     {
         $counterAccountNumber = '123456/7890';
-
-        $this->transaction->setCounterAccountNumber($counterAccountNumber);
+        $bankAccount = new BankAccount();
+        $bankAccount->setFormatted($counterAccountNumber);
+        $this->transaction->setCounterBankAccount($bankAccount);
         $this->assertEquals($counterAccountNumber, $this->transaction->getCounterAccountNumber());
     }
 

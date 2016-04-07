@@ -6,10 +6,11 @@ use JakubZapletal\Component\BankStatement\Statement\Transaction\TransactionInter
 
 class Statement implements StatementInterface, \Countable, \Iterator
 {
+
     /**
-     * @var string
+     * @var BankAccount
      */
-    protected $accountNumber;
+    protected $bankAccount;
 
     /**
      * @var float
@@ -66,7 +67,7 @@ class Statement implements StatementInterface, \Countable, \Iterator
      */
     public function setBalance($balance)
     {
-        $this->balance = (float) $balance;
+        $this->balance = (float)$balance;
 
         return $this;
     }
@@ -86,7 +87,7 @@ class Statement implements StatementInterface, \Countable, \Iterator
      */
     public function setCreditTurnover($creditTurnover)
     {
-        $this->creditTurnover = (float) $creditTurnover;
+        $this->creditTurnover = (float)$creditTurnover;
 
         return $this;
     }
@@ -146,64 +147,63 @@ class Statement implements StatementInterface, \Countable, \Iterator
      */
     public function setDebitTurnover($debitTurnover)
     {
-        $this->debitTurnover = (float) $debitTurnover;
+        $this->debitTurnover = (float)$debitTurnover;
 
         return $this;
     }
 
     /**
+     * @return BankAccount
+     */
+    public function getBankAccount()
+    {
+        return $this->bankAccount;
+    }
+
+    /**
+     * @param BankAccount $bankAccount
+     *
+     * @return $this
+     */
+    public function setBankAccount(BankAccount $bankAccount)
+    {
+        $this->bankAccount = $bankAccount;
+
+        return $this;
+    }
+
+    /**
+     * Only for backward compatibility
+     * @deprecated
+     *
      * @return string
      */
     public function getAccountNumber()
     {
-        return $this->accountNumber;
+        if ($this->bankAccount === null) {
+            return null;
+        }
+        return $this->bankAccount->getFormatted();
     }
 
     /**
-     * @param $accountNumber
-     *
-     * @return $this
-     */
-    public function setAccountNumber($accountNumber)
-    {
-        $this->accountNumber = $accountNumber;
-
-        return $this;
-    }
-
-    /**
-     * Split account number to parts
+     * Only for backward compatibility
+     * @deprecated
      *
      * @return array
      */
     public function getParsedAccountNumber()
     {
         $parsedAccountNumber = array(
-            'prefix'   => null,
-            'number'   => null,
+            'prefix' => null,
+            'number' => null,
             'bankCode' => null
         );
-
-        $accountNumber = $this->getAccountNumber();
-
-        $splitBankCode = explode('/', $accountNumber);
-        if (count($splitBankCode) === 2) {
-            $parsedAccountNumber['bankCode'] = $splitBankCode[1];
+        if ($this->bankAccount !== null) {
+            $parsedAccountNumber['prefix'] = $this->bankAccount->getPrefix();
+            $parsedAccountNumber['number'] = $this->bankAccount->getNumber();
+            $parsedAccountNumber['bankCode'] = $this->bankAccount->getBankCode();
         }
-
-        $splitNumber = explode('-', $splitBankCode[0]);
-        if (count($splitNumber) === 2) {
-            $parsedAccountNumber['prefix'] = $splitNumber[0];
-            $parsedAccountNumber['number'] = $splitNumber[1];
-        } else {
-            if (strlen($splitNumber[0]) <= 10) {
-                $parsedAccountNumber['number'] = $splitNumber[0];
-            } else {
-                $parsedAccountNumber['prefix'] = substr($splitNumber[0], 0, strlen($splitNumber[0]) - 10);
-                $parsedAccountNumber['number'] = substr($splitNumber[0], -10, 10);
-            }
-        }
-
         return $parsedAccountNumber;
     }
 
@@ -242,7 +242,7 @@ class Statement implements StatementInterface, \Countable, \Iterator
      */
     public function setLastBalance($lastBalance)
     {
-        $this->lastBalance = (float) $lastBalance;
+        $this->lastBalance = (float)$lastBalance;
 
         return $this;
     }
