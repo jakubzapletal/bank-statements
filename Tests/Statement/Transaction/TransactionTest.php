@@ -43,7 +43,7 @@ class TransactionTest extends TestCase
 
     public function testDateCreated()
     {
-        $date = new \DateTime('2014-05-28');
+        $date = new \DateTimeImmutable('2014-05-28');
 
         $this->transaction->setDateCreated($date);
         $this->assertEquals($date, $this->transaction->getDateCreated());

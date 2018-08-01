@@ -99,7 +99,7 @@ class CSOBCZParser extends XMLParser
 
         # Date last balance
         $date = $crawler->filter('S60_DATUM')->text();
-        $dateLastBalance = \DateTime::createFromFormat('d.m.Y His', $date . ' 120000');
+        $dateLastBalance = \DateTimeImmutable::createFromFormat('d.m.Y His', $date . ' 120000');
         $this->statement->setDateLastBalance($dateLastBalance);
 
         # Last balance
@@ -142,7 +142,7 @@ class CSOBCZParser extends XMLParser
 
         # Date created
         $date = $crawler->filter('S62_DATUM')->text();
-        $dateCreated = \DateTime::createFromFormat('d.m.Y His', $date . ' 120000');
+        $dateCreated = \DateTimeImmutable::createFromFormat('d.m.Y His', $date . ' 120000');
         $this->statement->setDateCreated($dateCreated);
     }
 
@@ -253,7 +253,7 @@ class CSOBCZParser extends XMLParser
 
         # Date created
         $date = $crawler->filter('DPROCD')->text();
-        $dateCreated = \DateTime::createFromFormat('d.m.Y His', $date . ' 120000');
+        $dateCreated = \DateTimeImmutable::createFromFormat('d.m.Y His', $date . ' 120000');
         $transaction->setDateCreated($dateCreated);
 
         return $transaction;

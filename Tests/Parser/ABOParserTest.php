@@ -103,13 +103,13 @@ class ABOParserTest extends TestCase
         # Statement
         $this->assertSame($statement, $parser->getStatement());
         $this->assertEquals('12345', $statement->getAccountNumber());
-        $this->assertEquals(new \DateTime('2014-01-01 12:00:00'), $statement->getDateLastBalance());
+        $this->assertEquals(new \DateTimeImmutable('2014-01-01 12:00:00'), $statement->getDateLastBalance());
         $this->assertSame(1000.00, $statement->getLastBalance());
         $this->assertSame(800.00, $statement->getBalance());
         $this->assertSame(400.00, $statement->getCreditTurnover());
         $this->assertSame(600.00, $statement->getDebitTurnover());
         $this->assertEquals(2, $statement->getSerialNumber());
-        $this->assertEquals(new \DateTime('2014-02-01 12:00:00'), $statement->getDateCreated());
+        $this->assertEquals(new \DateTimeImmutable('2014-02-01 12:00:00'), $statement->getDateCreated());
 
         # Transactions
         $statement->rewind();
@@ -124,7 +124,7 @@ class ABOParserTest extends TestCase
         $this->assertEquals(12, $transaction->getConstantSymbol());
         $this->assertEquals(13, $transaction->getSpecificSymbol());
         $this->assertEquals('Tran 1', $transaction->getNote());
-        $this->assertEquals(new \DateTime('2014-01-05 12:00:00'), $transaction->getDateCreated());
+        $this->assertEquals(new \DateTimeImmutable('2014-01-05 12:00:00'), $transaction->getDateCreated());
 
         $transaction = $statement->next();
         $this->assertNull($transaction->getCredit());
