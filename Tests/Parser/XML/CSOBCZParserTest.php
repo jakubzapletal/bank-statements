@@ -3,6 +3,7 @@
 namespace JakubZapletal\Component\BankStatement\Tests\Parser\XML;
 
 use JakubZapletal\Component\BankStatement\Parser\XML\CSOBCZParser;
+use JakubZapletal\Component\BankStatement\Statement\Statement;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -11,7 +12,7 @@ class CSOBCZParserTest extends TestCase
     /**
      * @var string
      */
-    protected $parserClassName = '\JakubZapletal\Component\BankStatement\Parser\XML\CSOBCZParser';
+    protected $parserClassName = CSOBCZParser::class;
 
     public function testParseContent()
     {
@@ -22,7 +23,7 @@ class CSOBCZParserTest extends TestCase
         $parserMock
             ->expects($this->once())
             ->method('parseCrawler')
-            ->with($this->isInstanceOf('\Symfony\Component\DomCrawler\Crawler'))
+            ->with($this->isInstanceOf(Crawler::class))
             ->will($this->returnArgument(0))
         ;
 
@@ -93,7 +94,7 @@ class CSOBCZParserTest extends TestCase
         $statement = $method->invokeArgs($parser, array($crawler));
 
         $this->assertInstanceOf(
-            '\JakubZapletal\Component\BankStatement\Statement\Statement',
+            Statement::class,
             $statement
         );
 

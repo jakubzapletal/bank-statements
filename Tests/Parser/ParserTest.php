@@ -4,6 +4,7 @@ namespace JakubZapletal\Component\BankStatement\Tests\Parser;
 
 use JakubZapletal\Component\BankStatement\Parser\Parser;
 use JakubZapletal\Component\BankStatement\Statement\Statement;
+use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
 use PHPUnit\Framework\TestCase;
 
 class ParserTest extends TestCase
@@ -15,7 +16,7 @@ class ParserTest extends TestCase
 
     protected function setUp()
     {
-        $this->parser = $this->getMockForAbstractClass('\JakubZapletal\Component\BankStatement\Parser\Parser');
+        $this->parser = $this->getMockForAbstractClass(Parser::class);
     }
 
     public function testGetStatement()
@@ -26,7 +27,7 @@ class ParserTest extends TestCase
         $property->setValue($this->parser, new Statement());
 
         $this->assertInstanceOf(
-            '\JakubZapletal\Component\BankStatement\Statement\Statement',
+            Statement::class,
             $this->parser->getStatement()
         );
     }
@@ -38,7 +39,7 @@ class ParserTest extends TestCase
         $method->setAccessible(true);
 
         $this->assertInstanceOf(
-            '\JakubZapletal\Component\BankStatement\Statement\Statement',
+            Statement::class,
             $method->invoke($this->parser)
         );
     }
@@ -50,7 +51,7 @@ class ParserTest extends TestCase
         $method->setAccessible(true);
 
         $this->assertInstanceOf(
-            '\JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction',
+            Transaction::class,
             $method->invoke($this->parser)
         );
     }

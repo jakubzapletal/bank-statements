@@ -3,6 +3,8 @@
 namespace JakubZapletal\Component\BankStatement\Parser\XML;
 
 use JakubZapletal\Component\BankStatement\Parser\XMLParser;
+use JakubZapletal\Component\BankStatement\Statement\Statement;
+use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
 use Symfony\Component\DomCrawler\Crawler;
 
 class CSOBCZParser extends XMLParser
@@ -30,7 +32,7 @@ class CSOBCZParser extends XMLParser
     /**
      * @param Crawler $crawler
      *
-     * @return \JakubZapletal\Component\BankStatement\Statement\Statement
+     * @return Statement
      */
     protected function parseCrawler(Crawler $crawler)
     {
@@ -191,7 +193,7 @@ class CSOBCZParser extends XMLParser
      *
      * @param Crawler $crawler
      *
-     * @return \JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction
+     * @return Transaction
      */
     protected function parseTransactionNode(Crawler $crawler = null)
     {

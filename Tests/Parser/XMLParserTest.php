@@ -2,14 +2,16 @@
 
 namespace JakubZapletal\Component\BankStatement\Tests\Parser;
 
+use JakubZapletal\Component\BankStatement\Parser\XMLParser;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DomCrawler\Crawler;
 
 class XMLParserTest extends TestCase
 {
     /**
      * @var string
      */
-    protected $parserClassName = '\JakubZapletal\Component\BankStatement\Parser\XMLParser';
+    protected $parserClassName = XMLParser::class;
 
     public function testParseFile()
     {
@@ -53,7 +55,7 @@ class XMLParserTest extends TestCase
     {
         $content = 'test';
 
-        $crawlerMock = $this->createMock('\Symfony\Component\DomCrawler\Crawler');
+        $crawlerMock = $this->createMock(Crawler::class);
         $crawlerMock
             ->expects($this->once())
             ->method('addXmlContent')
@@ -106,7 +108,7 @@ class XMLParserTest extends TestCase
         $method->setAccessible(true);
 
         $this->assertInstanceOf(
-            '\Symfony\Component\DomCrawler\Crawler',
+            Crawler::class,
             $method->invoke($parserMock)
         );
     }

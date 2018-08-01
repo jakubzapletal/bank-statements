@@ -51,11 +51,7 @@ class TransactionTest extends TestCase
 
     public function testDateCreatedException()
     {
-        if (!class_exists('\TypeError')) {
-            $this->expectException('\Exception');
-        } else {
-            $this->expectException('\TypeError');
-        }
+        $this->expectException(\TypeError::class);
 
         $this->transaction->setDateCreated('2014-05-28');
     }

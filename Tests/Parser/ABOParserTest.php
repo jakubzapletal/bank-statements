@@ -3,6 +3,7 @@
 namespace JakubZapletal\Component\BankStatement\Tests\Parser;
 
 use JakubZapletal\Component\BankStatement\Parser\ABOParser;
+use JakubZapletal\Component\BankStatement\Statement\Statement;
 use PHPUnit\Framework\TestCase;
 
 class ABOParserTest extends TestCase
@@ -10,7 +11,7 @@ class ABOParserTest extends TestCase
     /**
      * @var string
      */
-    protected $parserClassName = '\JakubZapletal\Component\BankStatement\Parser\ABOParser';
+    protected $parserClassName = ABOParser::class;
 
     public function testParseFile()
     {
@@ -47,7 +48,7 @@ class ABOParserTest extends TestCase
         $parserMock
             ->expects($this->once())
             ->method('parseFileObject')
-            ->with($this->isInstanceOf('\SplFileObject'))
+            ->with($this->isInstanceOf(\SplFileObject::class))
             ->will($this->returnValue($content))
         ;
 
@@ -95,7 +96,7 @@ class ABOParserTest extends TestCase
         $statement = $method->invokeArgs($parser, array($fileObject));
 
         $this->assertInstanceOf(
-            '\JakubZapletal\Component\BankStatement\Statement\Statement',
+            Statement::class,
             $statement
         );
 
