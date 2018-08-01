@@ -3,8 +3,9 @@
 namespace JakubZapletal\Component\BankStatement\Parser\XML;
 
 use JakubZapletal\Component\BankStatement\Parser\XMLParser;
+use JakubZapletal\Component\BankStatement\Statement\Statement;
+use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
 use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\CssSelector\CssSelector;
 
 class CSOBCZParser extends XMLParser
 {
@@ -31,13 +32,11 @@ class CSOBCZParser extends XMLParser
     /**
      * @param Crawler $crawler
      *
-     * @return \JakubZapletal\Component\BankStatement\Statement\Statement
+     * @return Statement
      */
     protected function parseCrawler(Crawler $crawler)
     {
         $this->statement = $this->getStatementClass();
-
-        CssSelector::disableHtmlExtension();
 
         $crawler = $crawler->filter('FINSTA > FINSTA03');
 
@@ -100,7 +99,7 @@ class CSOBCZParser extends XMLParser
 
         # Date last balance
         $date = $crawler->filter('S60_DATUM')->text();
-        $dateLastBalance = \DateTime::createFromFormat('d.m.Y His', $date . ' 120000');
+        $dateLastBalance = \DateTimeImmutable::createFromFormat('d.m.Y His', $date . ' 120000');
         $this->statement->setDateLastBalance($dateLastBalance);
 
         # Last balance
@@ -143,7 +142,7 @@ class CSOBCZParser extends XMLParser
 
         # Date created
         $date = $crawler->filter('S62_DATUM')->text();
-        $dateCreated = \DateTime::createFromFormat('d.m.Y His', $date . ' 120000');
+        $dateCreated = \DateTimeImmutable::createFromFormat('d.m.Y His', $date . ' 120000');
         $this->statement->setDateCreated($dateCreated);
     }
 
@@ -194,7 +193,7 @@ class CSOBCZParser extends XMLParser
      *
      * @param Crawler $crawler
      *
-     * @return \JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction
+     * @return Transaction
      */
     protected function parseTransactionNode(Crawler $crawler = null)
     {
@@ -254,7 +253,7 @@ class CSOBCZParser extends XMLParser
 
         # Date created
         $date = $crawler->filter('DPROCD')->text();
-        $dateCreated = \DateTime::createFromFormat('d.m.Y His', $date . ' 120000');
+        $dateCreated = \DateTimeImmutable::createFromFormat('d.m.Y His', $date . ' 120000');
         $transaction->setDateCreated($dateCreated);
 
         return $transaction;

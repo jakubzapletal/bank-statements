@@ -3,8 +3,10 @@
 namespace JakubZapletal\Component\BankStatement\Tests\Statement;
 
 use JakubZapletal\Component\BankStatement\Statement\Statement;
+use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
+use PHPUnit\Framework\TestCase;
 
-class StatementTest extends \PHPUnit_Framework_TestCase
+class StatementTest extends TestCase
 {
     /**
      * @var Statement
@@ -34,7 +36,7 @@ class StatementTest extends \PHPUnit_Framework_TestCase
 
     public function testDateCreated()
     {
-        $date = new \DateTime('2014-05-28');
+        $date = new \DateTimeImmutable('2014-05-28');
 
         $this->statement->setDateCreated($date);
         $this->assertEquals($date, $this->statement->getDateCreated());
@@ -42,11 +44,7 @@ class StatementTest extends \PHPUnit_Framework_TestCase
 
     public function testDateCreatedException()
     {
-        if (!class_exists('\TypeError')) {
-            $this->setExpectedException('\Exception');
-        } else {
-            $this->setExpectedException('\TypeError');
-        }
+        $this->expectException(\TypeError::class);
 
         $this->statement->setDateCreated('2014-05-28');
     }
@@ -108,14 +106,14 @@ class StatementTest extends \PHPUnit_Framework_TestCase
 
     public function testTransactions()
     {
-        $transactionMock_1 = $this->getMock('JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction');
+        $transactionMock_1 = $this->createMock(Transaction::class);
         $transactionMock_1
             ->expects($this->any())
             ->method('getReceiptId')
             ->will($this->returnValue(11))
         ;
 
-        $transactionMock_2 = $this->getMock('JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction');
+        $transactionMock_2 = $this->createMock(Transaction::class);
         $transactionMock_2
             ->expects($this->any())
             ->method('getReceiptId')
@@ -147,30 +145,22 @@ class StatementTest extends \PHPUnit_Framework_TestCase
 
     public function testAddTransactionException()
     {
-        $stdClassMock = $this->getMock('\stdClass');
+        $stdClassMock = $this->createMock(\stdClass::class);
 
-        if (!class_exists('\TypeError')) {
-            $this->setExpectedException('\Exception');
-        } else {
-            $this->setExpectedException('\TypeError');
-        }
+        $this->expectException(\TypeError::class);
 
         $this->statement->addTransaction($stdClassMock);
     }
 
     public function testRemoveTransactionException()
     {
-        $transactionMock = $this->getMock('JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction');
+        $transactionMock = $this->createMock(Transaction::class);
 
         $this->statement->addTransaction($transactionMock);
 
-        $stdClassMock = $this->getMock('\stdClass');
+        $stdClassMock = $this->createMock(\stdClass::class);
 
-        if (!class_exists('\TypeError')) {
-            $this->setExpectedException('\Exception');
-        } else {
-            $this->setExpectedException('\TypeError');
-        }
+        $this->expectException(\TypeError::class);
 
         $this->statement->removeTransaction($stdClassMock);
     }
@@ -185,7 +175,7 @@ class StatementTest extends \PHPUnit_Framework_TestCase
 
     public function testDateLastBalance()
     {
-        $date = new \DateTime('2014-05-28');
+        $date = new \DateTimeImmutable('2014-05-28');
 
         $this->statement->setDateLastBalance($date);
         $this->assertEquals($date, $this->statement->getDateLastBalance());
@@ -193,11 +183,7 @@ class StatementTest extends \PHPUnit_Framework_TestCase
 
     public function testDateLastBalanceException()
     {
-        if (!class_exists('\TypeError')) {
-            $this->setExpectedException('\Exception');
-        } else {
-            $this->setExpectedException('\TypeError');
-        }
+        $this->expectException(\TypeError::class);
 
         $this->statement->setDateLastBalance('2014-05-28');
     }

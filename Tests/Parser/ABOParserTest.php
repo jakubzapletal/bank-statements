@@ -3,19 +3,21 @@
 namespace JakubZapletal\Component\BankStatement\Tests\Parser;
 
 use JakubZapletal\Component\BankStatement\Parser\ABOParser;
+use JakubZapletal\Component\BankStatement\Statement\Statement;
+use PHPUnit\Framework\TestCase;
 
-class ABOParserTest extends \PHPUnit_Framework_TestCase
+class ABOParserTest extends TestCase
 {
     /**
      * @var string
      */
-    protected $parserClassName = '\JakubZapletal\Component\BankStatement\Parser\ABOParser';
+    protected $parserClassName = ABOParser::class;
 
     public function testParseFile()
     {
         $fileObject = new \SplFileObject(tempnam(sys_get_temp_dir(), 'test_'), 'w+');
 
-        $parserMock = $this->getMock($this->parserClassName, array('parseFileObject'));
+        $parserMock = $this->createPartialMock($this->parserClassName, array('parseFileObject'));
         $parserMock
             ->expects($this->once())
             ->method('parseFileObject')
@@ -42,11 +44,11 @@ class ABOParserTest extends \PHPUnit_Framework_TestCase
     {
         $content = 'test';
 
-        $parserMock = $this->getMock($this->parserClassName, array('parseFileObject'));
+        $parserMock = $this->createPartialMock($this->parserClassName, array('parseFileObject'));
         $parserMock
             ->expects($this->once())
             ->method('parseFileObject')
-            ->with($this->isInstanceOf('\SplFileObject'))
+            ->with($this->isInstanceOf(\SplFileObject::class))
             ->will($this->returnValue($content))
         ;
 
@@ -94,20 +96,20 @@ class ABOParserTest extends \PHPUnit_Framework_TestCase
         $statement = $method->invokeArgs($parser, array($fileObject));
 
         $this->assertInstanceOf(
-            '\JakubZapletal\Component\BankStatement\Statement\Statement',
+            Statement::class,
             $statement
         );
 
         # Statement
         $this->assertSame($statement, $parser->getStatement());
         $this->assertEquals('12345', $statement->getAccountNumber());
-        $this->assertEquals(new \DateTime('2014-01-01 12:00:00'), $statement->getDateLastBalance());
+        $this->assertEquals(new \DateTimeImmutable('2014-01-01 12:00:00'), $statement->getDateLastBalance());
         $this->assertSame(1000.00, $statement->getLastBalance());
         $this->assertSame(800.00, $statement->getBalance());
         $this->assertSame(400.00, $statement->getCreditTurnover());
         $this->assertSame(600.00, $statement->getDebitTurnover());
         $this->assertEquals(2, $statement->getSerialNumber());
-        $this->assertEquals(new \DateTime('2014-02-01 12:00:00'), $statement->getDateCreated());
+        $this->assertEquals(new \DateTimeImmutable('2014-02-01 12:00:00'), $statement->getDateCreated());
 
         # Transactions
         $statement->rewind();
@@ -122,7 +124,7 @@ class ABOParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(12, $transaction->getConstantSymbol());
         $this->assertEquals(13, $transaction->getSpecificSymbol());
         $this->assertEquals('Tran 1', $transaction->getNote());
-        $this->assertEquals(new \DateTime('2014-01-05 12:00:00'), $transaction->getDateCreated());
+        $this->assertEquals(new \DateTimeImmutable('2014-01-05 12:00:00'), $transaction->getDateCreated());
 
         $transaction = $statement->next();
         $this->assertNull($transaction->getCredit());

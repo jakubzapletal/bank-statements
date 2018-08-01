@@ -129,7 +129,7 @@ class ABOParser extends Parser
 
         # Date last balance
         $date = substr($line, 39, 6);
-        $dateLastBalance = \DateTime::createFromFormat('dmyHis', $date . '120000');
+        $dateLastBalance = \DateTimeImmutable::createFromFormat('dmyHis', $date . '120000');
         $this->statement->setDateLastBalance($dateLastBalance);
 
         # Last balance
@@ -170,7 +170,7 @@ class ABOParser extends Parser
 
         # Date created
         $date = substr($line, 108, 6);
-        $dateCreated = \DateTime::createFromFormat('dmyHis', $date . '120000');
+        $dateCreated = \DateTimeImmutable::createFromFormat('dmyHis', $date . '120000');
         $this->statement->setDateCreated($dateCreated);
     }
 
@@ -248,7 +248,7 @@ class ABOParser extends Parser
 
         # Date created
         $date = substr($line, 122, 6);
-        $dateCreated = \DateTime::createFromFormat('dmyHis', $date . '120000');
+        $dateCreated = \DateTimeImmutable::createFromFormat('dmyHis', $date . '120000');
         $transaction->setDateCreated($dateCreated);
 
         return $transaction;

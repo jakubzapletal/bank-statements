@@ -45,7 +45,7 @@ class Transaction implements TransactionInterface
     protected $note;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeImmutable
      */
     protected $dateCreated;
 
@@ -110,7 +110,7 @@ class Transaction implements TransactionInterface
     }
 
     /**
-     * @return \DateTime|null
+     * @return \DateTimeImmutable|null
      */
     public function getDateCreated()
     {
@@ -118,11 +118,11 @@ class Transaction implements TransactionInterface
     }
 
     /**
-     * @param \DateTime $dateCreated
+     * @param \DateTimeImmutable $dateCreated
      *
      * @return $this
      */
-    public function setDateCreated(\DateTime $dateCreated)
+    public function setDateCreated(\DateTimeImmutable $dateCreated)
     {
         $this->dateCreated = $dateCreated;
 

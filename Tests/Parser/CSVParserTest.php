@@ -2,12 +2,15 @@
 
 namespace JakubZapletal\Component\BankStatement\Tests\Parser;
 
-class CSVParserTest extends \PHPUnit_Framework_TestCase
+use JakubZapletal\Component\BankStatement\Parser\CSVParser;
+use PHPUnit\Framework\TestCase;
+
+class CSVParserTest extends TestCase
 {
     /**
      * @var string
      */
-    protected $parserClassName = '\JakubZapletal\Component\BankStatement\Parser\CSVParser';
+    protected $parserClassName = CSVParser::class;
 
     public function testParseFile()
     {
@@ -44,7 +47,7 @@ class CSVParserTest extends \PHPUnit_Framework_TestCase
         $parserMock
             ->expects($this->once())
             ->method('parseFileObject')
-            ->with($this->isInstanceOf('\SplFileObject'))
+            ->with($this->isInstanceOf(\SplFileObject::class))
             ->will($this->returnValue($content))
         ;
 

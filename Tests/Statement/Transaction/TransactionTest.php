@@ -3,8 +3,9 @@
 namespace JakubZapletal\Component\BankStatement\Tests\Statement\Transaction;
 
 use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
+use PHPUnit\Framework\TestCase;
 
-class TransactionTest extends \PHPUnit_Framework_TestCase
+class TransactionTest extends TestCase
 {
     /**
      * @var Transaction
@@ -42,7 +43,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
 
     public function testDateCreated()
     {
-        $date = new \DateTime('2014-05-28');
+        $date = new \DateTimeImmutable('2014-05-28');
 
         $this->transaction->setDateCreated($date);
         $this->assertEquals($date, $this->transaction->getDateCreated());
@@ -50,11 +51,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
 
     public function testDateCreatedException()
     {
-        if (!class_exists('\TypeError')) {
-            $this->setExpectedException('\Exception');
-        } else {
-            $this->setExpectedException('\TypeError');
-        }
+        $this->expectException(\TypeError::class);
 
         $this->transaction->setDateCreated('2014-05-28');
     }

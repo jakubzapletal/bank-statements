@@ -32,12 +32,12 @@ class Statement implements StatementInterface, \Countable, \Iterator
     protected $serialNumber;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeImmutable
      */
     protected $dateCreated;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeImmutable
      */
     protected $dateLastBalance;
 
@@ -92,7 +92,7 @@ class Statement implements StatementInterface, \Countable, \Iterator
     }
 
     /**
-     * @return \DateTime|null
+     * @return \DateTimeImmutable|null
      */
     public function getDateCreated()
     {
@@ -100,11 +100,11 @@ class Statement implements StatementInterface, \Countable, \Iterator
     }
 
     /**
-     * @param \DateTime $dateCreated
+     * @param \DateTimeImmutable $dateCreated
      *
      * @return $this
      */
-    public function setDateCreated(\DateTime $dateCreated)
+    public function setDateCreated(\DateTimeImmutable $dateCreated)
     {
         $this->dateCreated = $dateCreated;
 
@@ -208,7 +208,7 @@ class Statement implements StatementInterface, \Countable, \Iterator
     }
 
     /**
-     * @return \DateTime
+     * @return \DateTimeImmutable
      */
     public function getDateLastBalance()
     {
@@ -216,11 +216,11 @@ class Statement implements StatementInterface, \Countable, \Iterator
     }
 
     /**
-     * @param \DateTime $dateLastBalance
+     * @param \DateTimeImmutable $dateLastBalance
      *
      * @return $this
      */
-    public function setDateLastBalance(\DateTime $dateLastBalance)
+    public function setDateLastBalance(\DateTimeImmutable $dateLastBalance)
     {
         $this->dateLastBalance = $dateLastBalance;
 
