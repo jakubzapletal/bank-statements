@@ -4,8 +4,9 @@ namespace JakubZapletal\Component\BankStatement\Tests\Parser;
 
 use JakubZapletal\Component\BankStatement\Parser\Parser;
 use JakubZapletal\Component\BankStatement\Statement\Statement;
+use PHPUnit\Framework\TestCase;
 
-class ParserTest extends \PHPUnit_Framework_TestCase
+class ParserTest extends TestCase
 {
     /**
      * @var Parser

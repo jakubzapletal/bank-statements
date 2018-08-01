@@ -4,7 +4,6 @@ namespace JakubZapletal\Component\BankStatement\Parser\XML;
 
 use JakubZapletal\Component\BankStatement\Parser\XMLParser;
 use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\CssSelector\CssSelector;
 
 class CSOBCZParser extends XMLParser
 {
@@ -36,8 +35,6 @@ class CSOBCZParser extends XMLParser
     protected function parseCrawler(Crawler $crawler)
     {
         $this->statement = $this->getStatementClass();
-
-        CssSelector::disableHtmlExtension();
 
         $crawler = $crawler->filter('FINSTA > FINSTA03');
 

@@ -3,9 +3,10 @@
 namespace JakubZapletal\Component\BankStatement\Tests\Parser\XML;
 
 use JakubZapletal\Component\BankStatement\Parser\XML\CSOBCZParser;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DomCrawler\Crawler;
 
-class CSOBCZParserTest extends \PHPUnit_Framework_TestCase
+class CSOBCZParserTest extends TestCase
 {
     /**
      * @var string
@@ -17,7 +18,7 @@ class CSOBCZParserTest extends \PHPUnit_Framework_TestCase
         $text = 'ěščřžýáíéúůĚŠČŘŽÝÁÍÉÚŮ';
         $content = '<tag>' . $text . '</tag>';
 
-        $parserMock = $this->getMock($this->parserClassName, array('parseCrawler'));
+        $parserMock = $this->createPartialMock($this->parserClassName, array('parseCrawler'));
         $parserMock
             ->expects($this->once())
             ->method('parseCrawler')

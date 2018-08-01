@@ -2,7 +2,9 @@
 
 namespace JakubZapletal\Component\BankStatement\Tests\Parser;
 
-class XMLParserTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class XMLParserTest extends TestCase
 {
     /**
      * @var string
@@ -51,7 +53,7 @@ class XMLParserTest extends \PHPUnit_Framework_TestCase
     {
         $content = 'test';
 
-        $crawlerMock = $this->getMock('\Symfony\Component\DomCrawler\Crawler');
+        $crawlerMock = $this->createMock('\Symfony\Component\DomCrawler\Crawler');
         $crawlerMock
             ->expects($this->once())
             ->method('addXmlContent')

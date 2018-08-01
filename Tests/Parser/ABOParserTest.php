@@ -3,8 +3,9 @@
 namespace JakubZapletal\Component\BankStatement\Tests\Parser;
 
 use JakubZapletal\Component\BankStatement\Parser\ABOParser;
+use PHPUnit\Framework\TestCase;
 
-class ABOParserTest extends \PHPUnit_Framework_TestCase
+class ABOParserTest extends TestCase
 {
     /**
      * @var string
@@ -15,7 +16,7 @@ class ABOParserTest extends \PHPUnit_Framework_TestCase
     {
         $fileObject = new \SplFileObject(tempnam(sys_get_temp_dir(), 'test_'), 'w+');
 
-        $parserMock = $this->getMock($this->parserClassName, array('parseFileObject'));
+        $parserMock = $this->createPartialMock($this->parserClassName, array('parseFileObject'));
         $parserMock
             ->expects($this->once())
             ->method('parseFileObject')
@@ -42,7 +43,7 @@ class ABOParserTest extends \PHPUnit_Framework_TestCase
     {
         $content = 'test';
 
-        $parserMock = $this->getMock($this->parserClassName, array('parseFileObject'));
+        $parserMock = $this->createPartialMock($this->parserClassName, array('parseFileObject'));
         $parserMock
             ->expects($this->once())
             ->method('parseFileObject')
