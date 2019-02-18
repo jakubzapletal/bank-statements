@@ -199,8 +199,8 @@ class Statement implements StatementInterface, \Countable, \Iterator
             if (strlen($splitNumber[0]) <= 10) {
                 $parsedAccountNumber['number'] = $splitNumber[0];
             } else {
-                $parsedAccountNumber['prefix'] = substr($splitNumber[0], 0, strlen($splitNumber[0]) - 10);
-                $parsedAccountNumber['number'] = substr($splitNumber[0], -10, 10);
+                $parsedAccountNumber['prefix'] = mb_substr($splitNumber[0], 0, strlen($splitNumber[0]) - 10);
+                $parsedAccountNumber['number'] = mb_substr($splitNumber[0], -10, 10);
             }
         }
 
