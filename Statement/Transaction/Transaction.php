@@ -50,6 +50,21 @@ class Transaction implements TransactionInterface
     protected $dateCreated;
 
     /**
+     * @var AdditionalInformation|null
+     */
+    protected $additionalInformation;
+
+    /**
+     * @var string|null
+     */
+    protected $messageStart;
+
+    /**
+     * @var string|null
+     */
+    protected $messageEnd;
+
+    /**
      * @return string
      */
     public function getCounterAccountNumber()
@@ -227,5 +242,35 @@ class Transaction implements TransactionInterface
         $this->variableSymbol = $variableSymbol;
 
         return $this;
+    }
+
+    public function getAdditionalInformation(): ?AdditionalInformation
+    {
+        return $this->additionalInformation;
+    }
+
+    public function setAdditionalInformation(?AdditionalInformation $additionalInformation): void
+    {
+        $this->additionalInformation = $additionalInformation;
+    }
+
+    public function getMessageStart(): ?string
+    {
+        return $this->messageStart;
+    }
+
+    public function setMessageStart(?string $messageStart): void
+    {
+        $this->messageStart = $messageStart;
+    }
+
+    public function getMessageEnd(): ?string
+    {
+        return $this->messageEnd;
+    }
+
+    public function setMessageEnd(?string $messageEnd): void
+    {
+        $this->messageEnd = $messageEnd;
     }
 }

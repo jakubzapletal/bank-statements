@@ -2,7 +2,9 @@
 
 namespace JakubZapletal\Component\BankStatement\Parser;
 
+use DateTimeImmutable;
 use JakubZapletal\Component\BankStatement\Statement\Statement;
+use JakubZapletal\Component\BankStatement\Statement\Transaction\AdditionalInformation;
 use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
 
 /**
@@ -17,6 +19,9 @@ class ABOParser extends Parser
 {
     const LINE_TYPE_STATEMENT   = 'statement';
     const LINE_TYPE_TRANSACTION = 'transaction';
+    const LINE_TYPE_ADDITIONAL_INFORMATION = 'additionalInformation';
+    const LINE_TYPE_MESSAGE_START = 'messageStart';
+    const LINE_TYPE_MESSAGE_END = 'messageEnd';
 
     const POSTING_CODE_DEBIT           = 1;
     const POSTING_CODE_CREDIT          = 2;
@@ -62,6 +67,8 @@ class ABOParser extends Parser
     protected function parseFileObject(\SplFileObject $fileObject)
     {
         $this->statement = $this->getStatementClass();
+        /** @var Transaction|null $transaction */
+        $transaction = null;
 
         foreach ($fileObject as $line) {
             if ($fileObject->valid()) {
@@ -70,11 +77,29 @@ class ABOParser extends Parser
                         $this->parseStatementLine($line);
                         break;
                     case self::LINE_TYPE_TRANSACTION:
+                        if ($transaction) {
+                            $this->statement->addTransaction($transaction);
+                        }
                         $transaction = $this->parseTransactionLine($line);
-                        $this->statement->addTransaction($transaction);
+                        break;
+                    case self::LINE_TYPE_ADDITIONAL_INFORMATION:
+                        $additionalInformation = $this->parseAdditionalInformationLine($line);
+                        $transaction->setAdditionalInformation($additionalInformation);
+                        break;
+                    case self::LINE_TYPE_MESSAGE_START:
+                        $messageStart = rtrim(substr($line, 3));
+                        $transaction->setMessageStart($messageStart);
+                        break;
+                    case self::LINE_TYPE_MESSAGE_END:
+                        $messageEnd = rtrim(substr($line, 3));
+                        $transaction->setMessageEnd($messageEnd);
                         break;
                 }
             }
+        }
+
+        if ($transaction) {
+            $this->statement->addTransaction($transaction);
         }
 
         return $this->statement;
@@ -87,11 +112,23 @@ class ABOParser extends Parser
     /** @noinspection PhpInconsistentReturnPointsInspection */
     protected function getLineType($line)
     {
+        /**
+         * All messages (lines with code 078 and 079) are valid only for domestic payments where the line is just a message.
+         * In foreign payments those lines contains different values. This is not implemented.
+         * See: https://www.csob.cz/portal/documents/10710/1927786/format-gpc.pdf
+         */
+
         switch (substr($line, 0, 3)) {
             case '074':
                 return self::LINE_TYPE_STATEMENT;
             case '075':
                 return self::LINE_TYPE_TRANSACTION;
+            case '076':
+                return self::LINE_TYPE_ADDITIONAL_INFORMATION;
+            case '078':
+                return self::LINE_TYPE_MESSAGE_START;
+            case '079':
+                return self::LINE_TYPE_MESSAGE_END;
         }
 
         return null;
@@ -184,7 +221,7 @@ class ABOParser extends Parser
      * 5  | Amount                  | F  | 12 | NNNNNNNNNNNN         | 10
      * 6  | Posting code            | F  | 1  | N                    | 4
      * 7  | V-symbol                | F  | 10 | NNNNNNNNNN           |
-     * 8  | K-symbol.               | F  | 10 | NNNNNNNNNN           | 5
+     * 8  | K-symbol                | F  | 10 | NNNNNNNNNN           | 5
      * 9  | S-symbol                | F  | 10 | NNNNNNNNNN           |
      * 10 | Value                   | F  | 6  | ddmmyy               | 6
      * 11 | Additional detail       | F  | 20 | AAAAAAAAAAAAAAAAAAAA | 7
@@ -252,5 +289,38 @@ class ABOParser extends Parser
         $transaction->setDateCreated($dateCreated);
 
         return $transaction;
+    }
+
+    /**
+     * Sequence No. | Name | F/V | Minimum Length | Maximum Length | Content | Comment
+     * -------------|------|-----|----------------|----------------|---------|--------
+     * 1  | Type of record          | F  | 3  | 076
+     * 2  | Transfer identification | F  | 26 | AAAAAAAAAAAAAAAAAAAAAAAAAA |
+     * 3  | Deduction date          | F  | 6  | ddmmyy                     |
+     * 4  | Counter-party Name      | F  | 13 | A(92)                      |
+     * 15 | End-of-record character | F  | 2  | CR LF                      |
+     *
+     * @param string $line
+     *
+     * @return AdditionalInformation
+     */
+    protected function parseAdditionalInformationLine(string $line): AdditionalInformation
+    {
+        $additionalInformation =  $this->getAdditionalInformationClass();
+
+        # Transfer identification number
+        $transferIdentificationNumber = ltrim(substr($line, 3, 26), '0');
+        $additionalInformation->setTransferIdentificationNumber($transferIdentificationNumber);
+
+        # Deduction date
+        $date = substr($line, 29, 6);
+        $deductionDate = DateTimeImmutable::createFromFormat('dmyHis', $date . '120000');
+        $additionalInformation->setDeductionDate($deductionDate);
+
+        # Counter-party Name
+        $counterPartyName = rtrim(substr($line, 35, 92));
+        $additionalInformation->setCounterPartyName($counterPartyName);
+
+        return $additionalInformation;
     }
 }

@@ -111,4 +111,16 @@ interface TransactionInterface
      * @return $this
      */
     public function setVariableSymbol($variableSymbol);
+
+    public function getAdditionalInformation(): ?AdditionalInformation;
+
+    public function setAdditionalInformation(?AdditionalInformation $additionalInformation): void;
+
+    public function getMessageStart(): ?string;
+
+    public function setMessageStart(?string $messageStart): void;
+
+    public function getMessageEnd(): ?string;
+
+    public function setMessageEnd(?string $messageStart): void;
 }

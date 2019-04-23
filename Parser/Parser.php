@@ -3,6 +3,7 @@
 namespace JakubZapletal\Component\BankStatement\Parser;
 
 use JakubZapletal\Component\BankStatement\Statement\Statement;
+use JakubZapletal\Component\BankStatement\Statement\Transaction\AdditionalInformation;
 use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
 
 abstract class Parser implements ParserInterface
@@ -54,5 +55,10 @@ abstract class Parser implements ParserInterface
     protected function getTransactionClass()
     {
         return new Transaction();
+    }
+
+    protected function getAdditionalInformationClass(): AdditionalInformation
+    {
+        return new AdditionalInformation();
     }
 }

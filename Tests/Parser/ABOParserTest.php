@@ -2,8 +2,10 @@
 
 namespace JakubZapletal\Component\BankStatement\Tests\Parser;
 
+use DateTimeImmutable;
 use JakubZapletal\Component\BankStatement\Parser\ABOParser;
 use JakubZapletal\Component\BankStatement\Statement\Statement;
+use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
 use PHPUnit\Framework\TestCase;
 
 class ABOParserTest extends TestCase
@@ -86,11 +88,16 @@ class ABOParserTest extends TestCase
             'Tran 1              01102050114' . PHP_EOL
         );
         $fileObject->fwrite(
-            '0750000000000012345000000000025678900000000020020000000600001000000002100200000220000000023070114' .
-            'Tran 2              01101070114' . PHP_EOL
+            '07600000000000000000000002001050114Protistrana s.r.o.' . PHP_EOL
         );
         $fileObject->fwrite(
-            '0760000000000012345000000000025678900000000020020000000600001000000002100200000220000000023070114' .
+            '078First line' . PHP_EOL
+        );
+        $fileObject->fwrite(
+            '079Second line' . PHP_EOL
+        );
+        $fileObject->fwrite(
+            '0750000000000012345000000000025678900000000020020000000600001000000002100200000220000000023070114' .
             'Tran 2              01101070114' . PHP_EOL
         );
         $statement = $method->invokeArgs($parser, array($fileObject));
@@ -115,6 +122,7 @@ class ABOParserTest extends TestCase
         $statement->rewind();
         $this->assertCount(2, $statement);
 
+        /** @var Transaction $transaction */
         $transaction = $statement->current();
         $this->assertEquals('156789/1000', $transaction->getCounterAccountNumber());
         $this->assertEquals(2001, $transaction->getReceiptId());
@@ -125,6 +133,19 @@ class ABOParserTest extends TestCase
         $this->assertEquals(13, $transaction->getSpecificSymbol());
         $this->assertEquals('Tran 1', $transaction->getNote());
         $this->assertEquals(new \DateTimeImmutable('2014-01-05 12:00:00'), $transaction->getDateCreated());
+
+        $this->assertEquals(2001, $transaction->getAdditionalInformation()->getTransferIdentificationNumber());
+        $this->assertEquals(
+            new DateTimeImmutable('2014-01-05 12:00:00'),
+            $transaction->getAdditionalInformation()->getDeductionDate()
+        );
+        $this->assertEquals(
+            'Protistrana s.r.o.',
+            $transaction->getAdditionalInformation()->getCounterPartyName()
+        );
+
+        $this->assertEquals('First line', $transaction->getMessageStart());
+        $this->assertEquals('Second line', $transaction->getMessageEnd());
 
         $transaction = $statement->next();
         $this->assertNull($transaction->getCredit());
