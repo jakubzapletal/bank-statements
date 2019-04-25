@@ -50,6 +50,11 @@ class Transaction implements TransactionInterface
     protected $dateCreated;
 
     /**
+     * @var string
+     */
+    protected $currency;
+
+    /**
      * @var AdditionalInformation|null
      */
     protected $additionalInformation;
@@ -242,6 +247,16 @@ class Transaction implements TransactionInterface
         $this->variableSymbol = $variableSymbol;
 
         return $this;
+    }
+
+    public function getCurrency(): string
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(string $currency): void
+    {
+        $this->currency = $currency;
     }
 
     public function getAdditionalInformation(): ?AdditionalInformation

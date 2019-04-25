@@ -85,7 +85,7 @@ class ABOParserTest extends TestCase
         );
         $fileObject->fwrite(
             '0750000000000012345000000000015678900000000020010000000400002000000001100100000120000000013050114' .
-            'Tran 1              01102050114' . PHP_EOL
+            'Tran 1              00203050114' . PHP_EOL
         );
         $fileObject->fwrite(
             '07600000000000000000000002001050114Protistrana s.r.o.' . PHP_EOL
@@ -98,7 +98,7 @@ class ABOParserTest extends TestCase
         );
         $fileObject->fwrite(
             '0750000000000012345000000000025678900000000020020000000600001000000002100200000220000000023070114' .
-            'Tran 2              01101070114' . PHP_EOL
+            'Tran 2              00203070114' . PHP_EOL
         );
         $statement = $method->invokeArgs($parser, array($fileObject));
 
@@ -133,6 +133,8 @@ class ABOParserTest extends TestCase
         $this->assertEquals(13, $transaction->getSpecificSymbol());
         $this->assertEquals('Tran 1', $transaction->getNote());
         $this->assertEquals(new \DateTimeImmutable('2014-01-05 12:00:00'), $transaction->getDateCreated());
+        $this->assertEquals('CZK', $transaction->getCurrency());
+
 
         $this->assertEquals(2001, $transaction->getAdditionalInformation()->getTransferIdentificationNumber());
         $this->assertEquals(
@@ -159,11 +161,11 @@ class ABOParserTest extends TestCase
         );
         $fileObject->fwrite(
             '0750000000000012345000000000015678900000000020010000000400005000000001100100000120000000013050114' .
-            'Tran 1              01102050114' . PHP_EOL
+            'Tran 1              00203050114' . PHP_EOL
         );
         $fileObject->fwrite(
             '0750000000000012345000000000025678900000000020020000000600004000000002100200000220000000023070114' .
-            'Tran 2              01101070114' . PHP_EOL
+            'Tran 2              00203070114' . PHP_EOL
         );
         $statement = $method->invokeArgs($parser, array($fileObject));
 

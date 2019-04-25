@@ -3,6 +3,7 @@
 namespace JakubZapletal\Component\BankStatement\Parser;
 
 use DateTimeImmutable;
+use Exception;
 use JakubZapletal\Component\BankStatement\Statement\Statement;
 use JakubZapletal\Component\BankStatement\Statement\Transaction\AdditionalInformation;
 use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
@@ -10,7 +11,7 @@ use JakubZapletal\Component\BankStatement\Statement\Transaction\Transaction;
 /**
  * The ABO format is commonly used for exchanging financial messages in the Czech Republic and Slovakia
  *
- * @see https://github.com/jakubzapletal/bank-statements/blob/master/doc/abo.md
+ * @see https://www.csob.cz/portal/documents/10710/1927786/format-gpc.pdf
  *
  * Class Statement
  * @package JakubZapletal\Component\BankStatement\Parser
@@ -28,11 +29,33 @@ class ABOParser extends Parser
     const POSTING_CODE_DEBIT_REVERSAL  = 4;
     const POSTING_CODE_CREDIT_REVERSAL = 5;
 
+    private const CURRENCIES = [
+        '00036' => 'AUD',
+        '00124' => 'CAD',
+        '00156' => 'CNY',
+        '00203' => 'CZK',
+        '00208' => 'DKK',
+        '00978' => 'EUR',
+        '00826' => 'GBP',
+        '00191' => 'HRK',
+        '00348' => 'HUF',
+        '00756' => 'CHF',
+        '00392' => 'JPY',
+        '00578' => 'NOK',
+        '00985' => 'PLN',
+        '00946' => 'RON',
+        '00643' => 'RUB',
+        '00752' => 'SEK',
+        '00949' => 'TRY',
+        '00840' => 'USD',
+    ];
+
     /**
      * @param string $filePath
      *
      * @return Statement
      * @throws \RuntimeException
+     * @throws Exception
      */
     public function parseFile($filePath)
     {
@@ -46,6 +69,7 @@ class ABOParser extends Parser
      *
      * @return Statement
      * @throws \InvalidArgumentException
+     * @throws Exception
      */
     public function parseContent($content)
     {
@@ -61,7 +85,7 @@ class ABOParser extends Parser
 
     /**
      * @param \SplFileObject $fileObject
-     *
+     * @throws Exception
      * @return Statement
      */
     protected function parseFileObject(\SplFileObject $fileObject)
@@ -107,15 +131,15 @@ class ABOParser extends Parser
 
     /**
      * @param string $line
-     * @throws \Exception
+     * @throws Exception
+     * @return string|null
      */
     /** @noinspection PhpInconsistentReturnPointsInspection */
     protected function getLineType($line)
     {
         /**
          * All messages (lines with code 078 and 079) are valid only for domestic payments where the line is just a message.
-         * In foreign payments those lines contains different values. This is not implemented.
-         * See: https://www.csob.cz/portal/documents/10710/1927786/format-gpc.pdf
+         * For foreign payments those lines contain different values. This is not implemented.
          */
 
         switch (substr($line, 0, 3)) {
@@ -135,26 +159,23 @@ class ABOParser extends Parser
     }
 
     /**
-     * Sequence No. | Name | F/V | Minimum Length | Maximum Length | Content | Comment
-     * -------------|------|-----|----------------|----------------|---------|--------
-     * 1  | Type of record              | F | 3  | 074                  |
-     * 2  | Client account number       | F | 16 | NNNNNNNNNNNNNNNN     | 1
-     * 3  | Abbreviated client name     | F | 20 | AAAAAAAAAAAAAAAAAAAA |
-     * 4  | Old balance name            | F | 6  | ddmmyy               |
-     * 5  | Old balance                 | F | 14 | NNNNNNNNNNNNNN       | 5
-     * 6  | Old balance sign            | F | 1  | (plus) or (minus)    | 2
-     * 7  | New balance                 | F | 14 | NNNNNNNNNNNNNN       | 5
-     * 8  | New balance sign            | F | 1  | (plus) or (minus)    | 2
-     * 9  | Transactions – debit        | F | 14 | NNNNNNNNNNNNNN       | 5
-     * 10 | Sign of debit transactions  | F | 1  | (plus) or (minus)    | 3
-     * 11 | Transactions – credit       | F | 14 | NNNNNNNNNNNNNN       | 5
-     * 12 | Sign of credit transactions | F | 1  | (plus) or (minus)    | 3
-     * 13 | Statement sequence number   | F | 3  | NNN                  |
-     * 14 | Posting date                | F | 6  | ddmmyy               |
-     * 15 | Filler                      | F | 14 | (space)              | 4
-     * 16 | End-of-record character     | F | 2  | CR LF                |
-     *
-     * @see https://github.com/jakubzapletal/bank-statements/blob/master/doc/abo.md
+     * No.| Name               | F/V | Pos | Len | Content | Implemented
+     * ---|--------------------|-----|-----|-----|---------|
+     * 1  | Record type        |  F  | 1   | 3   | 074     | Y
+     * 2  | Account number     |  F  | 4   | 16  | int     | Y
+     * 3  | Account owner name |  F  | 20  | 20  | string  | N
+     * 4  | Date from          |  F  | 40  | 6   | ddmmyy  | Y
+     * 5  | Old balance        |  F  | 46  | 14  | int     | N
+     * 6  | Old balance sign   |  F  | 60  | 1   | + or -  | N
+     * 7  | New balance        |  F  | 61  | 14  | int     | Y
+     * 8  | New balance sign   |  F  | 75  | 1   | + or -  | Y
+     * 9  | Debit sum          |  F  | 76  | 14  | int     | Y
+     * 10 | Debit sign         |  F  | 90  | 1   | + or -  | Y
+     * 11 | Credit sum         |  F  | 91  | 14  | int     | Y
+     * 12 | Credit sign        |  F  | 105 | 1   | + or -  | Y
+     * 13 | Statement number   |  F  | 106 | 3   | int     | Y
+     * 14 | Date to            |  F  | 109 | 6   | ddmmyy  | Y
+     * 15 | Filler             |  F  | 115 | 13  | (space) | Y
      *
      * @param string $line
      */
@@ -170,7 +191,7 @@ class ABOParser extends Parser
         $this->statement->setDateLastBalance($dateLastBalance);
 
         # Last balance
-        $lastBalance = ltrim(substr($line, 45, 14), '0') / 100;
+        $lastBalance = (int) ltrim(substr($line, 45, 14), '0') / 100;
         $lastBalanceSign = substr($line, 59, 1);
         if ($lastBalanceSign === '-') {
             $lastBalance *= -1;
@@ -178,7 +199,7 @@ class ABOParser extends Parser
         $this->statement->setLastBalance($lastBalance);
 
         # Balance
-        $balance = ltrim(substr($line, 60, 14), '0') / 100;
+        $balance = (int) ltrim(substr($line, 60, 14), '0') / 100;
         $balanceSign = substr($line, 74, 1);
         if ($balanceSign === '-') {
             $balance *= -1;
@@ -186,7 +207,7 @@ class ABOParser extends Parser
         $this->statement->setBalance($balance);
 
         # Debit turnover
-        $debitTurnover = ltrim(substr($line, 75, 14), '0') / 100;
+        $debitTurnover = (int) ltrim(substr($line, 75, 14), '0') / 100;
         $debitTurnoverSign = substr($line, 89, 1);
         if ($debitTurnoverSign === '-') {
             $debitTurnover *= -1;
@@ -194,7 +215,7 @@ class ABOParser extends Parser
         $this->statement->setDebitTurnover($debitTurnover);
 
         # Credit turnover
-        $creditTurnover = ltrim(substr($line, 90, 14), '0') / 100;
+        $creditTurnover = (int) ltrim(substr($line, 90, 14), '0') / 100;
         $creditTurnoverSign = substr($line, 104, 1);
         if ($creditTurnoverSign === '-') {
             $creditTurnover *= -1;
@@ -212,28 +233,26 @@ class ABOParser extends Parser
     }
 
     /**
-     * Sequence No. | Name | F/V | Minimum Length | Maximum Length | Content | Comment
-     * -------------|------|-----|----------------|----------------|---------|--------
-     * 1  | Type of record          | F  | 3  | 075
-     * 2  | Client account number   | F  | 16 | NNNNNNNNNNNNNNNN     | 1
-     * 3  | Counter-account number  | F  | 16 | NNNNNNNNNNNNNNNN     | 1,2
-     * 4  | Document number         | F  | 13 | AAAAAAAAAAAAA        | 3
-     * 5  | Amount                  | F  | 12 | NNNNNNNNNNNN         | 10
-     * 6  | Posting code            | F  | 1  | N                    | 4
-     * 7  | V-symbol                | F  | 10 | NNNNNNNNNN           |
-     * 8  | K-symbol                | F  | 10 | NNNNNNNNNN           | 5
-     * 9  | S-symbol                | F  | 10 | NNNNNNNNNN           |
-     * 10 | Value                   | F  | 6  | ddmmyy               | 6
-     * 11 | Additional detail       | F  | 20 | AAAAAAAAAAAAAAAAAAAA | 7
-     * 12 | Change of item code     | F  | 1  | A                    | 8
-     * 13 | Type of data            | F  | 4  | rmoo                 | 9
-     * 14 | Due date                | F  | 6  | ddmmyy               |
-     * 15 | End-of-record character | F  | 2  | CR LF                |
-     *
-     * @see https://github.com/jakubzapletal/bank-statements/blob/master/doc/abo.md
+     * No.| Name                      | F/V | Pos | Len | Content | Implemented
+     * ---|---------------------------|-----|-----|-----|---------|
+     * 1  | Record Type               |  F  | 1   | 3   | 075     | Y
+     * 2  | Client account number     |  F  | 4   | 16  | int     | N
+     * 3  | Counter-account number    |  F  | 20  | 16  | int     | Y
+     * 4  | Identification            |  F  | 36  | 13  | string  | Y
+     * 5  | Amount                    |  F  | 49  | 12  | int     | Y
+     * 6  | Posting code              |  F  | 61  | 1   | int     | Y
+     * 7  | Variable symbol           |  F  | 62  | 10  | int     | Y
+     * 8  | Filler                    |  F  | 72  | 2   | 00      | Y
+     * 9  | Counter-account bank code |  F  | 74  | 4   | int     | Y
+     * 10 | Constant symbol           |  F  | 78  | 4   | int     | Y
+     * 11 | Specific symbol           |  F  | 82  | 10  | int     | Y
+     * 12 | Date                      |  F  | 92  | 6   | ddmmyy  | Y
+     * 13 | Note                      |  F  | 98  | 20  | string  | Y
+     * 14 | Currency code             |  F  | 118 | 5   | int     | N
+     * 15 | Posting date              |  F  | 123 | 4   | ddmmyy  | N
      *
      * @param string $line
-     *
+     * @throws Exception
      * @return Transaction
      */
     protected function parseTransactionLine($line)
@@ -245,7 +264,7 @@ class ABOParser extends Parser
         $transaction->setReceiptId($receiptId);
 
         # Debit / Credit
-        $amount = ltrim(substr($line, 48, 12), '0') / 100;
+        $amount = (int) ltrim(substr($line, 48, 12), '0') / 100;
         $postingCode = substr($line, 60, 1);
         switch ($postingCode) {
             case self::POSTING_CODE_DEBIT:
@@ -288,17 +307,20 @@ class ABOParser extends Parser
         $dateCreated = \DateTimeImmutable::createFromFormat('dmyHis', $date . '120000');
         $transaction->setDateCreated($dateCreated);
 
+        # Currency
+        $currencyCode = substr($line, 117, 5);
+        $currency = $this->findCurrencyByCode($currencyCode);
+        $transaction->setCurrency($currency);
         return $transaction;
     }
 
     /**
-     * Sequence No. | Name | F/V | Minimum Length | Maximum Length | Content | Comment
-     * -------------|------|-----|----------------|----------------|---------|--------
-     * 1  | Type of record          | F  | 3  | 076
-     * 2  | Transfer identification | F  | 26 | AAAAAAAAAAAAAAAAAAAAAAAAAA |
-     * 3  | Deduction date          | F  | 6  | ddmmyy                     |
-     * 4  | Counter-party Name      | F  | 13 | A(92)                      |
-     * 15 | End-of-record character | F  | 2  | CR LF                      |
+     * No.| Name               | F/V | Pos | Len | Content | Implemented
+     * ---|------              |-----|-----|-----|---------|
+     * 1  | Record type        |  F  | 1   | 3   | 076     | Y
+     * 2  | Identification     |  F  | 4   | 26  | string  | Y
+     * 3  | Deduction date     |  F  | 30  | 6   | ddmmyy  | Y
+     * 4  | Counter-party Name |  F  | 36  | 13  | string  | Y
      *
      * @param string $line
      *
@@ -322,5 +344,20 @@ class ABOParser extends Parser
         $additionalInformation->setCounterPartyName($counterPartyName);
 
         return $additionalInformation;
+    }
+
+    /**
+     * @param string $currencyCode
+     * @throws Exception
+     * @return string
+     */
+    private function findCurrencyByCode(string $currencyCode): string
+    {
+        if (!array_key_exists($currencyCode, self::CURRENCIES)) {
+            throw new Exception('Unknown currency with code ' . $currencyCode);
+        }
+
+        return self::CURRENCIES[$currencyCode];
+
     }
 }
