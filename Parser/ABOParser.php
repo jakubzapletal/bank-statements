@@ -161,7 +161,7 @@ class ABOParser extends Parser
     protected function parseStatementLine($line)
     {
         # Account number
-        $accountNumber = ltrim(substr($line, 3, 16), '0');
+        $accountNumber = substr($line, 3, 6) . '-' . substr($line, 9, 10);
         $this->statement->setAccountNumber($accountNumber);
 
         # Date last balance
@@ -271,7 +271,7 @@ class ABOParser extends Parser
         $transaction->setConstantSymbol($constantSymbol);
 
         # Counter account number
-        $counterAccountNumber = ltrim(substr($line, 19, 16), '0');
+        $counterAccountNumber = substr($line, 19, 6) . '-' . substr($line, 25, 10);
         $codeOfBank = substr($line, 73, 4);
         $transaction->setCounterAccountNumber($counterAccountNumber . '/' . $codeOfBank);
 

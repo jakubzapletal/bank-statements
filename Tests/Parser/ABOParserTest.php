@@ -80,7 +80,7 @@ class ABOParserTest extends TestCase
         # Positive statement
         $fileObject = new \SplFileObject(tempnam(sys_get_temp_dir(), 'test_'), 'w+');
         $fileObject->fwrite(
-            '0740000000000012345Test s.r.o.         01011400000000100000+00000000080000+00000000060000' .
+            '0741234561234567890Test s.r.o.         01011400000000100000+00000000080000+00000000060000' .
             '+00000000040000+002010214              ' . PHP_EOL
         );
         $fileObject->fwrite(
@@ -109,7 +109,7 @@ class ABOParserTest extends TestCase
 
         # Statement
         $this->assertSame($statement, $parser->getStatement());
-        $this->assertEquals('12345', $statement->getAccountNumber());
+        $this->assertEquals('123456-1234567890', $statement->getAccountNumber());
         $this->assertEquals(new \DateTimeImmutable('2014-01-01 12:00:00'), $statement->getDateLastBalance());
         $this->assertSame(1000.00, $statement->getLastBalance());
         $this->assertSame(800.00, $statement->getBalance());
@@ -124,7 +124,7 @@ class ABOParserTest extends TestCase
 
         /** @var Transaction $transaction */
         $transaction = $statement->current();
-        $this->assertEquals('156789/1000', $transaction->getCounterAccountNumber());
+        $this->assertEquals('000000-0000156789/1000', $transaction->getCounterAccountNumber());
         $this->assertEquals(2001, $transaction->getReceiptId());
         $this->assertSame(400.00, $transaction->getCredit());
         $this->assertNull($transaction->getDebit());
