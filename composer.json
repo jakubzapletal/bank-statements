@@ -6,7 +6,7 @@
         "psr-4": { "JakubZapletal\\Component\\BankStatement\\": ""}
     },
     "require": {
-        "php": "^7.1.0",
+        "php": "^7.1 || ^8.0",
         "symfony/dom-crawler": "^4.1 || ^5.0",
         "symfony/css-selector": "^4.1 || ^5.0"
     },
