@@ -1,5 +1,5 @@
 {
-    "name": "enumag/bank-statements",
+    "name": "ifm24/bank-statements",
     "description": "The PHP library to parse bank account statements",
     "license": "MIT",
     "autoload": {
