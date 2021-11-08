@@ -29,6 +29,29 @@ class ABOParser extends Parser
     const POSTING_CODE_DEBIT_REVERSAL  = 4;
     const POSTING_CODE_CREDIT_REVERSAL = 5;
 
+    const POSTING_CODE_MAP = [
+      1  => self::POSTING_CODE_DEBIT,
+      2  => self::POSTING_CODE_CREDIT,
+      4  => self::POSTING_CODE_DEBIT_REVERSAL,
+      5  => self::POSTING_CODE_CREDIT_REVERSAL
+    ];
+
+    const POSTING_CODE_MAP_ALT = [
+      1  => self::POSTING_CODE_DEBIT,
+      2  => self::POSTING_CODE_CREDIT,
+      3  => self::POSTING_CODE_DEBIT_REVERSAL,
+      4  => self::POSTING_CODE_CREDIT_REVERSAL
+    ];
+
+    const BANKS_WITH_ALT_POSTING_CODE = [
+      '0300', // Česká spořitelna
+    ];
+
+    const BANKS_WITH_CURRENCY_CODE_IN_TRANSACTION = [
+      '0300', // ČSOB
+      '2010', // FIO
+    ];
+
     private const CURRENCIES = [
         '00036' => 'AUD',
         '00124' => 'CAD',
@@ -182,7 +205,7 @@ class ABOParser extends Parser
     protected function parseStatementLine($line)
     {
         # Account number
-        $accountNumber = substr($line, 3, 6) . '-' . substr($line, 9, 10);
+        $accountNumber = substr($line, 3, 6) . '-' . substr($line, 9, 6) . '/' . substr($line, 15, 4);
         $this->statement->setAccountNumber($accountNumber);
 
         # Date last balance
@@ -248,7 +271,7 @@ class ABOParser extends Parser
      * 11 | Specific symbol           |  F  | 82  | 10  | int     | Y
      * 12 | Date                      |  F  | 92  | 6   | ddmmyy  | Y
      * 13 | Note                      |  F  | 98  | 20  | string  | Y
-     * 14 | Currency code             |  F  | 118 | 5   | int     | N
+     * 14 | Currency or data type     |  F  | 118 | 5   | int     | N
      * 15 | Posting date              |  F  | 123 | 4   | ddmmyy  | N
      *
      * @param string $line
@@ -266,7 +289,10 @@ class ABOParser extends Parser
         # Debit / Credit
         $amount = (int) ltrim(substr($line, 48, 12), '0') / 100;
         $postingCode = substr($line, 60, 1);
-        switch ($postingCode) {
+        $postingCodeMap = in_array($this->statement->getAccountNumberBankCode(), self::BANKS_WITH_ALT_POSTING_CODE)
+            ? self::POSTING_CODE_MAP_ALT
+            : self::POSTING_CODE_MAP;
+        switch ($postingCodeMap[$postingCode]) {
             case self::POSTING_CODE_DEBIT:
                 $transaction->setDebit($amount);
                 break;
@@ -302,15 +328,17 @@ class ABOParser extends Parser
         $note = rtrim(substr($line, 97, 20));
         $transaction->setNote($note);
 
+        # Currency
+        if (in_array($this->statement->getAccountNumberBankCode(), self::BANKS_WITH_CURRENCY_CODE_IN_TRANSACTION)) {
+            $currencyCode = substr($line, 117, 5);
+            $currency = $this->findCurrencyByCode($currencyCode);
+            $transaction->setCurrency($currency);
+        }
+
         # Date created
         $date = substr($line, 122, 6);
         $dateCreated = \DateTimeImmutable::createFromFormat('dmyHis', $date . '120000');
         $transaction->setDateCreated($dateCreated);
-
-        # Currency
-        $currencyCode = substr($line, 117, 5);
-        $currency = $this->findCurrencyByCode($currencyCode);
-        $transaction->setCurrency($currency);
         return $transaction;
     }
 
@@ -358,6 +386,5 @@ class ABOParser extends Parser
         }
 
         return self::CURRENCIES[$currencyCode];
-
     }
 }
