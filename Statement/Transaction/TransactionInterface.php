@@ -112,7 +112,7 @@ interface TransactionInterface
      */
     public function setVariableSymbol($variableSymbol);
 
-    public function getCurrency(): string;
+    public function getCurrency(): ?string;
 
     public function setCurrency(string $currency): void;
 

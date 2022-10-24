@@ -208,6 +208,30 @@ class Statement implements StatementInterface, \Countable, \Iterator
     }
 
     /**
+     * @return string
+     */
+    public function getAccountNumberPrefix()
+    {
+        return $this->getParsedAccountNumber()['prefix'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountNumberNumber()
+    {
+        return $this->getParsedAccountNumber()['number'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccountNumberBankCode()
+    {
+        return $this->getParsedAccountNumber()['bankCode'];
+    }
+
+    /**
      * @return \DateTimeImmutable
      */
     public function getDateLastBalance()
