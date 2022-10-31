@@ -110,10 +110,11 @@ class CSOBCZParserTest extends TestCase
         $this->assertEquals(new \DateTimeImmutable('2014-02-01 12:00:00'), $statement->getDateCreated());
 
         # Transactions
-        $statement->rewind();
         $this->assertCount(2, $statement);
 
-        $transaction = $statement->current();
+        $transactions = $statement->getIterator();
+
+        $transaction = $transactions->current();
         $this->assertEquals('156789/1000', $transaction->getCounterAccountNumber());
         $this->assertEquals(2001, $transaction->getReceiptId());
         $this->assertSame(400.00, $transaction->getCredit());
@@ -124,7 +125,8 @@ class CSOBCZParserTest extends TestCase
         $this->assertEquals('Tran 1', $transaction->getNote());
         $this->assertEquals(new \DateTimeImmutable('2014-01-05 12:00:00'), $transaction->getDateCreated());
 
-        $transaction = $statement->next();
+        $transactions->next();
+        $transaction = $transactions->current();
         $this->assertNull($transaction->getCredit());
         $this->assertSame(600.00, $transaction->getDebit());
 
@@ -187,12 +189,13 @@ class CSOBCZParserTest extends TestCase
         $this->assertSame(-600.00, $statement->getDebitTurnover());
 
         # Transactions
-        $statement->rewind();
+        $transactions = $statement->getIterator();
 
-        $transaction = $statement->current();
+        $transaction = $transactions->current();
         $this->assertSame(-400.00, $transaction->getCredit());
 
-        $transaction = $statement->next();
+        $transactions->next();
+        $transaction = $transactions->current();
         $this->assertSame(-600.00, $transaction->getDebit());
     }
 }

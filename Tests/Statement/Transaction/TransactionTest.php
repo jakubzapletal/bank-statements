@@ -12,7 +12,7 @@ class TransactionTest extends TestCase
      */
     protected $transaction;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->transaction = new Transaction();
     }

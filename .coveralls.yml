@@ -1,2 +1,2 @@
-src_dir: .
-coverage_clover: build/logs/clover.xml
+coverage_clover: coverage.xml
+json_path: coverage.json

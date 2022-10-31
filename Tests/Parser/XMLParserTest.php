@@ -42,11 +42,9 @@ class XMLParserTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testParseFileException()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $parserMock = $this->getMockForAbstractClass($this->parserClassName);
         $parserMock->parseFile('test.file');
     }
@@ -90,11 +88,9 @@ class XMLParserTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testParseContentExceptionNotString()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $parserMock = $this->getMockForAbstractClass($this->parserClassName);
         $parserMock->parseContent(123);
     }

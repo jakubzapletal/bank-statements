@@ -1,31 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit
-    colors="true"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
-    stopOnFailure="false"
-    bootstrap="Tests/bootstrap.php"
->
-
-    <testsuites>
-        <testsuite name="JakubZapletal_Component_BankStatement_TestSuite">
-            <directory>./Tests/</directory>
-        </testsuite>
-    </testsuites>
-
-    <logging>
-        <log type="coverage-clover" target="build/logs/clover.xml"/>
-    </logging>
-
-    <filter>
-        <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>./Tests</directory>
-                <directory>./vendor</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" colors="true" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" stopOnFailure="false" bootstrap="Tests/bootstrap.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <include>
+      <directory>./</directory>
+    </include>
+    <exclude>
+      <directory>./Tests</directory>
+      <directory>./vendor</directory>
+    </exclude>
+    <report>
+      <clover outputFile="coverage.xml"/>
+    </report>
+  </coverage>
+  <testsuites>
+    <testsuite name="JakubZapletal_Component_BankStatement_TestSuite">
+      <directory>./Tests/</directory>
+    </testsuite>
+  </testsuites>
+  <logging/>
 </phpunit>

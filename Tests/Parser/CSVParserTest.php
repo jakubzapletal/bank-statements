@@ -30,11 +30,9 @@ class CSVParserTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testParseFileException()
     {
+        $this->expectException(\RuntimeException::class);
         $parserMock = $this->getMockForAbstractClass($this->parserClassName);
         $parserMock->parseFile('test.file');
     }
@@ -57,11 +55,9 @@ class CSVParserTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testParseContentException()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $parserMock = $this->getMockForAbstractClass($this->parserClassName);
         $parserMock->parseContent(123);
     }

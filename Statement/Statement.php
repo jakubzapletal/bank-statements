@@ -2,9 +2,11 @@
 
 namespace JakubZapletal\Component\BankStatement\Statement;
 
+use ArrayIterator;
+use Iterator;
 use JakubZapletal\Component\BankStatement\Statement\Transaction\TransactionInterface;
 
-class Statement implements StatementInterface, \Countable, \Iterator
+class Statement implements StatementInterface, \Countable, \IteratorAggregate
 {
     /**
      * @var string
@@ -319,63 +321,16 @@ class Statement implements StatementInterface, \Countable, \Iterator
         return $this;
     }
 
-    /**
-     * @see \Countable::count()
-     *
-     * @return int
-     */
-    public function count()
+    public function count(): int
     {
         return count($this->transactions);
     }
 
-    /**
-     * @see \Iterator::current()
-     *
-     * @return TransactionInterface
+   /**
+     * @return Iterator<TransactionInterface>
      */
-    public function current()
+    public function getIterator()
     {
-        return current($this->transactions);
-    }
-
-    /**
-     * @see \Iterator::key()
-     *
-     * @return mixed
-     */
-    public function key()
-    {
-        return key($this->transactions);
-    }
-
-    /**
-     * @see \Iterator::next()
-     *
-     * @return TransactionInterface
-     */
-    public function next()
-    {
-        return next($this->transactions);
-    }
-
-    /**
-     * @see \Iterator::rewind()
-     *
-     * @return mixed
-     */
-    public function rewind()
-    {
-        return reset($this->transactions);
-    }
-
-    /**
-     * @see \Iterator::valid()
-     *
-     * @return bool
-     */
-    public function valid()
-    {
-        return key($this->transactions) !== null;
+        return new ArrayIterator($this->transactions);
     }
 }

@@ -14,7 +14,7 @@ class ParserTest extends TestCase
      */
     protected $parser;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->parser = $this->getMockForAbstractClass(Parser::class);
     }

@@ -161,7 +161,8 @@ class ABOParser extends Parser
     protected function getLineType($line)
     {
         /**
-         * All messages (lines with code 078 and 079) are valid only for domestic payments where the line is just a message.
+         * All messages (lines with code 078 and 079) are valid only
+         * for domestic payments where the line is just a message.
          * For foreign payments those lines contain different values. This is not implemented.
          */
 

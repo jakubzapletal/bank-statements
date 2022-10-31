@@ -13,7 +13,7 @@ class StatementTest extends TestCase
      */
     protected $statement;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->statement = new Statement();
     }
@@ -130,14 +130,16 @@ class StatementTest extends TestCase
 
         $this->assertEquals(2, $this->statement->count());
 
-        $this->statement->rewind();
-        $this->assertEquals(11, $this->statement->current()->getReceiptId());
-        $this->assertSame(0, $this->statement->key());
+        $transactions = $this->statement->getIterator();
 
-        $this->assertEquals(22, $this->statement->next()->getReceiptId());
+        $this->assertEquals(11, $transactions->current()->getReceiptId());
+        $this->assertSame(0, $transactions->key());
 
-        $this->assertFalse($this->statement->next());
-        $this->assertFalse($this->statement->valid());
+        $transactions->next();
+        $this->assertEquals(22, $transactions->current()->getReceiptId());
+
+        $transactions->next();
+        $this->assertFalse($transactions->valid());
 
         $this->statement->removeTransaction($transactionMock_2);
         $this->assertCount(1, $this->statement->getTransactions());
