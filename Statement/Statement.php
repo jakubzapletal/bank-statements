@@ -326,10 +326,10 @@ class Statement implements StatementInterface, \Countable, \IteratorAggregate
         return count($this->transactions);
     }
 
-   /**
+    /**
      * @return Iterator<TransactionInterface>
      */
-    public function getIterator()
+    public function getIterator(): Iterator
     {
         return new ArrayIterator($this->transactions);
     }
