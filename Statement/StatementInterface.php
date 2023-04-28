@@ -49,6 +49,18 @@ interface StatementInterface
     /**
      * @return string
      */
+    public function getFiller();
+
+    /**
+     * @param string $filler
+     *
+     * @return $this
+     */
+    public function setFiller(string $filler);
+
+    /**
+     * @return string
+     */
     public function getSerialNumber();
 
     /**

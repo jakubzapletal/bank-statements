@@ -54,6 +54,12 @@ class Statement implements StatementInterface, \Countable, \IteratorAggregate
     protected $transactions = array();
 
     /**
+     * @var string
+     */
+    private $filler;
+
+
+    /**
      * @return float
      */
     public function getBalance()
@@ -109,6 +115,26 @@ class Statement implements StatementInterface, \Countable, \IteratorAggregate
     public function setDateCreated(\DateTimeImmutable $dateCreated)
     {
         $this->dateCreated = $dateCreated;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFiller()
+    {
+        return $this->filler;
+    }
+
+    /**
+     * @param string $filler
+     *
+     * @return $this
+     */
+    public function setFiller($filler)
+    {
+        $this->filler = $filler;
 
         return $this;
     }

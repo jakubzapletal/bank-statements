@@ -206,7 +206,7 @@ class ABOParser extends Parser
     protected function parseStatementLine($line)
     {
         # Account number
-        $accountNumber = substr($line, 3, 6) . '-' . substr($line, 9, 6) . '/' . substr($line, 15, 4);
+        $accountNumber = substr($line, 3, 6) . '-' . substr($line, 9, 10);
         $this->statement->setAccountNumber($accountNumber);
 
         # Date last balance
@@ -254,6 +254,10 @@ class ABOParser extends Parser
         $date = substr($line, 108, 6);
         $dateCreated = \DateTimeImmutable::createFromFormat('dmyHis', $date . '120000');
         $this->statement->setDateCreated($dateCreated);
+
+        # Filler
+        $filler = substr($line, 114, 13);
+        $this->statement->setFiller($filler);
     }
 
     /**
